@@ -19,9 +19,11 @@ public class bListener implements Listener {
 	public void onButtonPress(PlayerInteractEvent event) {
 		// Variables
 		Permission permissions = ButtonPromote.permissions;
-		HashMap<Player, String> selecting = ButtonPromote.selecting;
+		HashMap<Player, String> promoting = ButtonPromote.promoting;
+		HashMap<Player, String> messaging = ButtonPromote.messaging;
 		HashMap<Player, Location> warping = ButtonPromote.warping;
-		HashMap<Block, String> buttons = ButtonPromote.buttons;
+		HashMap<Block, String> promotions = ButtonPromote.promotions;
+		HashMap<Block, String> messages = ButtonPromote.messages;
 		HashMap<Block, Location> warps = ButtonPromote.warps;
 		List<Player> removing = ButtonPromote.removing;
 		Action action = event.getAction();
@@ -33,24 +35,24 @@ public class bListener implements Listener {
 		if (!(block.getType().equals(Material.STONE_BUTTON))) return;
 		
 		// Set Promotions
-		if (selecting.containsKey(player)) {
-			buttons.put(block, selecting.get(player));
-			player.sendMessage(ChatColor.GREEN + "This button will now promote users to " + selecting.get(player));
-			selecting.remove(player);
+		if (promoting.containsKey(player)) {
+			promotions.put(block, promoting.get(player));
+			player.sendMessage(ChatColor.GREEN + "This button will now promote users to " + promoting.get(player));
+			promoting.remove(player);
 			ButtonPromote.save();
 			return;
 		}
 		
-		// Remove Promotions
-		if (removing.contains(player)) {
-			buttons.remove(block);
-			player.sendMessage(ChatColor.GREEN + "This button will no longer promote users.");
-			removing.remove(player);
+		// Set Messages
+		if (messaging.containsKey(player)) {
+			messages.put(block, messaging.get(player));
+			player.sendMessage(ChatColor.GREEN + "This button will now send players that message!");
+			messaging.remove(player);
 			ButtonPromote.save();
 			return;
 		}
 		
-		// Remove Warps
+		// Set Warps
 		if (warping.containsKey(player)) {
 			warps.put(block, warping.get(player));
 			player.sendMessage(ChatColor.GREEN + "This button will now warp players to the set location!");
@@ -59,15 +61,32 @@ public class bListener implements Listener {
 			return;
 		}
 		
-		// Promotion
-		if (buttons.containsKey(block)) {
-			if (!permissions.has(player, "use")) return;
-			String group = buttons.get(block);
-			permissions.playerAddGroup(player, group);
-			player.sendMessage(ChatColor.GREEN + "You are now a member of " + group + "!");
+		// Remove Promotions
+		if (removing.contains(player)) {
+			promotions.remove(block);
+			player.sendMessage(ChatColor.GREEN + "This button will no longer promote users.");
+			removing.remove(player);
+			ButtonPromote.save();
+			return;
 		}
 		
-		// Warping
+		// Receive Promotion
+		if (promotions.containsKey(block)) {
+			if (!permissions.has(player, "use")) return;
+			String group = promotions.get(block);
+			permissions.playerAddGroup(player, group);
+			// Commented out because admins can instead use /setmessage to do this more freely.
+			// player.sendMessage(ChatColor.GREEN + "You are now a member of " + group + "!");
+		}
+		
+		// Receive Message
+		if (messages.containsKey(block)) {
+			if (!permissions.has(player, "use")) return;
+			String message = messages.get(block);
+			player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+		}
+		
+		// Receive Warp
 		if (warps.containsKey(block)) {
 			if (permissions.has(player, "use")) player.teleport(warps.get(block));
 		}

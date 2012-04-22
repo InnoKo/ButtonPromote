@@ -34,26 +34,29 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class ButtonPromote extends JavaPlugin {
 	
 	public Logger log = Logger.getLogger("Minecraft");
-	public PluginDescriptionFile pdf = this.getDescription();
 	public static Permission permissions = null;
 	public static boolean usePerms = false;
-	public static HashMap<Player, String> selecting = new HashMap<Player, String>();
-	public static List<Player> removing = new ArrayList<Player>();
+	public static HashMap<Player, String> promoting = new HashMap<Player, String>();
+	public static HashMap<Player, String> messaging = new HashMap<Player, String>();
 	public static HashMap<Player, Location> warping = new HashMap<Player, Location>();
-	public static HashMap<Block, String> buttons = new HashMap<Block, String>();
+	public static HashMap<Block, String> promotions = new HashMap<Block, String>();
+	public static HashMap<Block, String> messages = new HashMap<Block, String>();
 	public static HashMap<Block, Location> warps = new HashMap<Block, Location>();
+	public static List<Player> removing = new ArrayList<Player>();
 	static File pData;
+	static File mData;
 	static File wData;
 	static String path = "plugins/ButtonPromote";
 	
 	@Override
 	public void onDisable() {
 		save();
-		log.info("ButtonPromote v" + pdf.getVersion() + " by iMint is now disabled.");
+		log.info("ButtonPromote by iMint is now disabled.");
 	}
 	
 	@Override
 	public void onEnable() {
+		PluginDescriptionFile pdf = this.getDescription();
 		usePerms = setupPermissions();
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new bListener(), this);
@@ -66,11 +69,25 @@ public class ButtonPromote extends JavaPlugin {
 		try {
 			FileOutputStream buttonOS = new FileOutputStream(pData);
 			PrintStream buttonOut = new PrintStream(buttonOS);
-			for(Entry<Block, String> entry : buttons.entrySet()) {
+			for(Entry<Block, String> entry : promotions.entrySet()) {
 				Block block = entry.getKey();
 				String group = entry.getValue();
 				String world = block.getWorld().getName();
 				String print = block.getX() + "," + block.getY() + "," + block.getZ() + ":" + group + ":" + world;
+				buttonOut.println(print);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		// Save messages
+		try {
+			FileOutputStream buttonOS = new FileOutputStream(mData);
+			PrintStream buttonOut = new PrintStream(buttonOS);
+			for(Entry<Block, String> entry : messages.entrySet()) {
+				Block block = entry.getKey();
+				String message = entry.getValue();
+				String world = block.getWorld().getName();
+				String print = world + ":" + block.getX() + "," + block.getY() + "," + block.getZ() + ":" + message;
 				buttonOut.println(print);
 			}
 		} catch (Exception e) {
@@ -112,11 +129,29 @@ public class ButtonPromote extends JavaPlugin {
 				World world = getServer().getWorld(_world);
 				Block button = world.getBlockAt(Integer.parseInt(_button[0]), Integer.parseInt(_button[1]), Integer.parseInt(_button[2]));
 				String group = _group;
-				buttons.put(button, group);
-				
-				String[] _warp = temp[3].split(",");
-				Location warp = new Location(world, Integer.parseInt(_warp[0]), Integer.parseInt(_warp[1]), Integer.parseInt(_warp[2]));
-				warps.put(button, warp);
+				promotions.put(button, group);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		// Load messages
+		try {
+			mData = new File(path + "/messages.dat");
+			if (!mData.exists()) {
+				(new File(path)).mkdir();
+				mData.createNewFile();
+			}
+			FileInputStream in = new FileInputStream(mData);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(new DataInputStream(in)));
+			String s;
+			while ((s = reader.readLine()) != null) {
+				String temp[] = s.split(":");
+				String[] _button = temp[1].split(",");
+				String _world = temp[0];
+				World world = getServer().getWorld(_world);
+				Block button = world.getBlockAt(Integer.parseInt(_button[0]), Integer.parseInt(_button[1]), Integer.parseInt(_button[2]));
+				String message = temp[2];
+				messages.put(button, message);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -167,34 +202,19 @@ public class ButtonPromote extends JavaPlugin {
 			sendUsage(player);
 			return true;
 		}
-		// Set Warps
+		// Set Promotions
 		if (a[0].equalsIgnoreCase("setpromotion")) {
-			if (a.length < 2) {
-				sendUsage(player);
-				return true;
-			}
 			if (!permissions.has(player, "buttonpromote.create")) {
-				player.sendMessage(ChatColor.RED + "You do not have permission to set buttons!");
+				player.sendMessage(ChatColor.RED + "You do not have permission to set button promotions!");
 				return true;
 			}
-			if (a[1].isEmpty()) {
+			if (a.length < 2) {
 				player.sendMessage(ChatColor.RED + "You need to specify a group to promote to!");
 				return true;
 			}
 			cancelSelections(player);
-			selecting.put(player, a[1]);
-			player.sendMessage(ChatColor.AQUA + "Click a button to add this promotion to it! To cancel selection, type " + ChatColor.WHITE + "/bp cancel");
-			return true;
-		}
-		// Remove Promotions
-		if (a[0].equalsIgnoreCase("remove")) {
-			if (!permissions.has(player, "buttonpromote.remove")) {
-				player.sendMessage(ChatColor.RED + "You do not have permission to remove buttons!");
-				return true;
-			}
-			cancelSelections(player);
-			removing.add(player);
-			player.sendMessage(ChatColor.AQUA + "Right-click a button to remove it's promotion!");
+			promoting.put(player, a[1]);
+			player.sendMessage(ChatColor.AQUA + "Click a button to add this promotion to it! To cancel selection, type  " + ChatColor.WHITE + "/bp cancel");
 			return true;
 		}
 		// Set Warps
@@ -208,9 +228,50 @@ public class ButtonPromote extends JavaPlugin {
 			player.sendMessage(ChatColor.AQUA + "Click a button to add a warp to this location! To cancel selection, type " + ChatColor.WHITE + "/bp cancel");
 			return true;
 		}
+		// Set Messages
+		if (a[0].equalsIgnoreCase("setmessage")) {
+			if (!permissions.has(player, "buttonpromote.create")) {
+				player.sendMessage(ChatColor.RED + "You do not have permission to set button messages!");
+				return true;
+			}
+			if (a.length < 2) {
+				player.sendMessage(ChatColor.RED + "You need to specify a message!");
+				return true;
+			}
+			cancelSelections(player);
+			String message = a[1];
+			for(int i = 2; i < a.length; i++) {
+				message += " " + a[i];
+			}
+			messaging.put(player, message);
+			player.sendMessage(ChatColor.AQUA + "Click a button to add this message to it! To cancel selection, type " + ChatColor.WHITE + "/bp cancel");
+			return true;
+		}
+		// Remove Promotions
+		if (a[0].equalsIgnoreCase("remove")) {
+			if (!permissions.has(player, "buttonpromote.remove")) {
+				player.sendMessage(ChatColor.RED + "You do not have permission to remove promotions!");
+				return true;
+			}
+			cancelSelections(player);
+			removing.add(player);
+			player.sendMessage(ChatColor.AQUA + "Right-click a button to remove it's promotion!");
+			return true;
+		}
+		// Reload Files
+		if (a[0].equalsIgnoreCase("reload")) {
+			if (!permissions.has(player, "buttonpromote.reload")) {
+				player.sendMessage(ChatColor.RED + "You do not have permission to reload!");
+				return true;
+			}
+			load();
+			player.sendMessage(ChatColor.GREEN + "ButtonPromote successfully reloaded!");
+			return true;
+		}
 		// Cancel Selections
 		if (a[0].equalsIgnoreCase("cancel")) {
 			cancelSelections(player);
+			player.sendMessage(ChatColor.GRAY + "Canceled all selections.");
 			return true;
 		}
 		sendUsage(player);
@@ -221,19 +282,19 @@ public class ButtonPromote extends JavaPlugin {
 	public void sendUsage(Player s) {
 		s.sendMessage(ChatColor.GRAY + "|---------------ButtonPromote Commands----------------|");
 		s.sendMessage("/bp setpromotion <group name> " + ChatColor.GOLD + "- Set a button to promote users to the specified group.");
-		s.sendMessage("/bp remove " + ChatColor.GOLD + "- Remove group promotion from a button.");
+		s.sendMessage("/bp setmessage <message> " + ChatColor.GOLD + "- Set a button to send users the specified message.");
 		s.sendMessage("/bp setwarp " + ChatColor.GOLD + "- Set a button to warp users to your current location.");
-		s.sendMessage("/bp cancel " + ChatColor.GOLD + "- Cancels all current selections.");
-		s.sendMessage("/bp help " + ChatColor.GOLD + "- Shows help dialog.");
+		s.sendMessage("/bp remove " + ChatColor.GOLD + "- Remove group promotion from a button.");
+		s.sendMessage("/bp cancel " + ChatColor.GOLD + "- Cancels any current selections.");
+		s.sendMessage("/bp reload " + ChatColor.GOLD + "- Reloads data files.");
 		s.sendMessage(ChatColor.GRAY + "|----------------------------------------------------|");
 	}
 	
 	// Cancel all button selections
 	public static void cancelSelections(Player p) {
-		ButtonPromote.selecting.remove(p);
+		ButtonPromote.promoting.remove(p);
 		ButtonPromote.removing.remove(p);
 		ButtonPromote.warping.remove(p);
-		p.sendMessage(ChatColor.GRAY + "Canceled all selections.");
 	}
 	
 }
