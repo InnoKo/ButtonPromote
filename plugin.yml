@@ -1,0 +1,10 @@
+name: ButtonPromote
+main: me.iMint.ButtonPromote.ButtonPromote
+version: 1.5
+author: iMint
+depend: [Vault]
+commands:
+    bp:
+        description: Main command.
+        usage: /bp
+            
