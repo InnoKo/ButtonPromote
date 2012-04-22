@@ -76,7 +76,8 @@ public class bListener implements Listener {
 			String group = promotions.get(block);
 			permissions.playerAddGroup(player, group);
 			// Commented out because admins can instead use /setmessage to do this more freely.
-			// player.sendMessage(ChatColor.GREEN + "You are now a member of " + group + "!");
+			// Un - commented out because it looks nice :P
+			player.sendMessage(ChatColor.GREEN + "You are now a member of " + group + "!");
 		}
 		
 		// Receive Message
