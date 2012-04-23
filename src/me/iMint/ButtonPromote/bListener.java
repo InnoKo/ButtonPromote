@@ -21,9 +21,11 @@ public class bListener implements Listener {
 		Permission permissions = ButtonPromote.permissions;
 		HashMap<Player, String> promoting = ButtonPromote.promoting;
 		HashMap<Player, String> messaging = ButtonPromote.messaging;
+		HashMap<Player, String> commanding = ButtonPromote.commanding;
 		HashMap<Player, Location> warping = ButtonPromote.warping;
 		HashMap<Block, String> promotions = ButtonPromote.promotions;
 		HashMap<Block, String> messages = ButtonPromote.messages;
+		HashMap<Block, String> commands = ButtonPromote.commands;
 		HashMap<Block, Location> warps = ButtonPromote.warps;
 		List<Player> removing = ButtonPromote.removing;
 		Action action = event.getAction();
@@ -52,6 +54,15 @@ public class bListener implements Listener {
 			return;
 		}
 		
+		// Set Commands
+		if (messaging.containsKey(player)) {
+			messages.put(block, commanding.get(player));
+			player.sendMessage(ChatColor.GREEN + "This button will now execute the command " + commanding.get(player));
+			commanding.remove(player);
+			ButtonPromote.save();
+			return;
+		}
+		
 		// Set Warps
 		if (warping.containsKey(player)) {
 			warps.put(block, warping.get(player));
@@ -64,6 +75,9 @@ public class bListener implements Listener {
 		// Remove Promotions
 		if (removing.contains(player)) {
 			promotions.remove(block);
+			messages.remove(block);
+			commands.remove(block);
+			warps.remove(block);
 			player.sendMessage(ChatColor.GREEN + "This button will no longer promote users.");
 			removing.remove(player);
 			ButtonPromote.save();
@@ -72,7 +86,7 @@ public class bListener implements Listener {
 		
 		// Receive Promotion
 		if (promotions.containsKey(block)) {
-			if (!permissions.has(player, "use")) return;
+			if (!permissions.has(player, "ButtonPromote.use")) return;
 			String group = promotions.get(block);
 			permissions.playerAddGroup(player, group);
 			// Commented out because admins can instead use /setmessage to do this more freely.
@@ -82,14 +96,19 @@ public class bListener implements Listener {
 		
 		// Receive Message
 		if (messages.containsKey(block)) {
-			if (!permissions.has(player, "use")) return;
+			if (!permissions.has(player, "ButtonPromote.use")) return;
 			String message = messages.get(block);
 			player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
 		}
 		
+		// Receive Command
+		if (commands.containsKey(block)) {
+			if (!permissions.has(player, "ButtonPromote.use")) return;
+		}
+		
 		// Receive Warp
 		if (warps.containsKey(block)) {
-			if (permissions.has(player, "use")) player.teleport(warps.get(block));
+			if (permissions.has(player, "ButtonPromote.use")) player.teleport(warps.get(block));
 		}
 	}
 }
