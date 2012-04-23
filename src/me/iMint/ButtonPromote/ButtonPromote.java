@@ -38,9 +38,11 @@ public class ButtonPromote extends JavaPlugin {
 	public static boolean usePerms = false;
 	public static HashMap<Player, String> promoting = new HashMap<Player, String>();
 	public static HashMap<Player, String> messaging = new HashMap<Player, String>();
+	public static HashMap<Player, String> commanding = new HashMap<Player, String>();
 	public static HashMap<Player, Location> warping = new HashMap<Player, Location>();
 	public static HashMap<Block, String> promotions = new HashMap<Block, String>();
 	public static HashMap<Block, String> messages = new HashMap<Block, String>();
+	public static HashMap<Block, String> commands = new HashMap<Block, String>();
 	public static HashMap<Block, Location> warps = new HashMap<Block, Location>();
 	public static List<Player> removing = new ArrayList<Player>();
 	static File pData;
@@ -217,17 +219,6 @@ public class ButtonPromote extends JavaPlugin {
 			player.sendMessage(ChatColor.AQUA + "Click a button to add this promotion to it! To cancel selection, type  " + ChatColor.WHITE + "/bp cancel");
 			return true;
 		}
-		// Set Warps
-		if (a[0].equalsIgnoreCase("setwarp")) {
-			if (!permissions.has(player, "buttonpromote.create")) {
-				player.sendMessage(ChatColor.RED + "You do not have permission to set button warps!");
-				return true;
-			}
-			cancelSelections(player);
-			warping.put(player, player.getLocation());
-			player.sendMessage(ChatColor.AQUA + "Click a button to add a warp to this location! To cancel selection, type " + ChatColor.WHITE + "/bp cancel");
-			return true;
-		}
 		// Set Messages
 		if (a[0].equalsIgnoreCase("setmessage")) {
 			if (!permissions.has(player, "buttonpromote.create")) {
@@ -244,7 +235,34 @@ public class ButtonPromote extends JavaPlugin {
 				message += " " + a[i];
 			}
 			messaging.put(player, message);
-			player.sendMessage(ChatColor.AQUA + "Click a button to add this message to it! To cancel selection, type " + ChatColor.WHITE + "/bp cancel");
+			player.sendMessage(ChatColor.AQUA + "Click a button to add this message to it! To cancel selection, type  " + ChatColor.WHITE + "/bp cancel");
+			return true;
+		}
+		// Set Commands
+		if (a[0].equalsIgnoreCase("setcommand")) {
+			if (!permissions.has(player, "buttonpromote.create")) {
+				player.sendMessage(ChatColor.RED + "You do not have permission to set button commands!");
+				return true;
+			}
+			if (a.length < 2) {
+				player.sendMessage(ChatColor.RED + "You need to specify a command!");
+				return true;
+			}
+			cancelSelections(player);
+			String command = a[1];
+			commanding.put(player, command);
+			player.sendMessage(ChatColor.AQUA + "Click a button to add this command to it! To cancel selection, type  " + ChatColor.WHITE + "/bp cancel");
+			return true;
+		}
+		// Set Warps
+		if (a[0].equalsIgnoreCase("setwarp")) {
+			if (!permissions.has(player, "buttonpromote.create")) {
+				player.sendMessage(ChatColor.RED + "You do not have permission to set button warps!");
+				return true;
+			}
+			cancelSelections(player);
+			warping.put(player, player.getLocation());
+			player.sendMessage(ChatColor.AQUA + "Click a button to add a warp to this location! To cancel selection, type  " + ChatColor.WHITE + "/bp cancel");
 			return true;
 		}
 		// Remove Promotions
