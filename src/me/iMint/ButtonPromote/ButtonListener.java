@@ -39,34 +39,38 @@ public class ButtonListener implements Listener {
 						ChatColor.GREEN
 								+ "This button will now promote users to "
 								+ ButtonPromote.selecting.get(p));
-				ButtonPromote.selecting.remove(p);
+				plugin.cancelSelections(p);
 			// Remove Promotions
 			} else if (ButtonPromote.selecting.get(p)
 					.equalsIgnoreCase("remove")) {
 				ba.clearButton();
 				p.sendMessage(ChatColor.GREEN
 						+ "This button will no longer promote users.");
-				ButtonPromote.selecting.remove(p);
+				plugin.cancelSelections(p);
 			// Set Warps
 			} else if (ButtonPromote.selecting.get(p).equalsIgnoreCase("warp")) {
 				ba.setWarp(ButtonPromote.warping.get(p));
 				p.sendMessage(ChatColor.GREEN
 						+ "This button will now warp players to the set location!");
-				ButtonPromote.selecting.remove(p);
+				plugin.cancelSelections(p);
 			// Set Message
 			} else if (ButtonPromote.selecting.get(p).equalsIgnoreCase(
 					"message")) {
+				ba.setMessage(ButtonPromote.messaging.get(p));
 				p.sendMessage(ChatColor.GREEN
 						+ "This button will now send players that message!");
+				plugin.cancelSelections(p);
 			// Set Command
 			} else if (ButtonPromote.selecting.get(p).equalsIgnoreCase(
 					"command")) {
+				ba.setCommand(ButtonPromote.commanding.get(p));
 				p.sendMessage(ChatColor.GREEN
 						+ "This button will now execute the command "
 						+ ButtonPromote.commanding.get(p));
+				plugin.cancelSelections(p);
 			} else {
 				p.sendMessage("Unknown command value reseting selection.");
-				ButtonPromote.selecting.remove(p);
+				plugin.cancelSelections(p);
 			}
 		} else {
 			if (ButtonPromote.permissions.has(p, "ButtonPromote.use")) {

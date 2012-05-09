@@ -82,6 +82,8 @@ public class ButtonPromote extends JavaPlugin {
 		selecting.remove(p);
 		promoting.remove(p);
 		warping.remove(p);
+		messaging.remove(p);
+		commanding.remove(p);
 	}
 
 	private void setupDatabase() {
