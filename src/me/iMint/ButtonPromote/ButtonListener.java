@@ -83,9 +83,13 @@ public class ButtonListener implements Listener {
 				if (ba.getGroup() != null) {
 					if (!ba.getGroup().equalsIgnoreCase("none")) {
 						String g = ba.getGroup();
-						ButtonPromote.permissions.playerAddGroup(p, g);
-						p.sendMessage(ChatColor.GREEN
-								+ "You are now a member of " + g + "!");
+						if(!ButtonPromote.permissions.playerInGroup(p, g)) {
+							ButtonPromote.permissions.playerAddGroup(p, g);
+							p.sendMessage(ChatColor.GREEN
+									+ "You are now a member of " + g + "!");
+						} else {
+							p.sendMessage(ChatColor.GREEN + "You have already been promoted.");
+						}
 					}
 				}
 
