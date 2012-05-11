@@ -40,27 +40,27 @@ public class ButtonListener implements Listener {
 								+ "This button will now promote users to "
 								+ ButtonPromote.selecting.get(p));
 				plugin.cancelSelections(p);
-			// Remove Promotions
+				// Remove Promotions
 			} else if (ButtonPromote.selecting.get(p)
 					.equalsIgnoreCase("remove")) {
 				ba.clearButton();
 				p.sendMessage(ChatColor.GREEN
 						+ "This button will no longer promote users.");
 				plugin.cancelSelections(p);
-			// Set Warps
+				// Set Warps
 			} else if (ButtonPromote.selecting.get(p).equalsIgnoreCase("warp")) {
 				ba.setWarp(ButtonPromote.warping.get(p));
 				p.sendMessage(ChatColor.GREEN
 						+ "This button will now warp players to the set location!");
 				plugin.cancelSelections(p);
-			// Set Message
+				// Set Message
 			} else if (ButtonPromote.selecting.get(p).equalsIgnoreCase(
 					"message")) {
 				ba.setMessage(ButtonPromote.messaging.get(p));
 				p.sendMessage(ChatColor.GREEN
 						+ "This button will now send players that message!");
 				plugin.cancelSelections(p);
-			// Set Command
+				// Set Command
 			} else if (ButtonPromote.selecting.get(p).equalsIgnoreCase(
 					"command")) {
 				ba.setCommand(ButtonPromote.commanding.get(p));
@@ -75,36 +75,32 @@ public class ButtonListener implements Listener {
 		} else {
 			if (ButtonPromote.permissions.has(p, "ButtonPromote.use")) {
 				// Get Warps
-				if (ba.getWarp() != null) {
+				if (ba.hasWarp()) {
 					p.teleport(ba.getWarp());
 				}
 
 				// Get Promotions
-				if (ba.getGroup() != null) {
-					if (!ba.getGroup().equalsIgnoreCase("none")) {
-						String g = ba.getGroup();
-						if(!ButtonPromote.permissions.playerInGroup(p, g)) {
-							ButtonPromote.permissions.playerAddGroup(p, g);
-							p.sendMessage(ChatColor.GREEN
-									+ "You are now a member of " + g + "!");
-						} else {
-							p.sendMessage(ChatColor.GREEN + "You have already been promoted.");
-						}
+				if (ba.hasGroup()) {
+					String g = ba.getGroup();
+					if (!ButtonPromote.permissions.playerInGroup(p, g)) {
+						ButtonPromote.permissions.playerAddGroup(p, g);
+						p.sendMessage(ChatColor.GREEN
+								+ "You are now a member of " + g + "!");
+					} else {
+						p.sendMessage(ChatColor.GREEN
+								+ "You have already been promoted.");
 					}
 				}
 
 				// Get Messages
-				if (ba.getMessage() != null) {
-					if (!ba.getMessage().equalsIgnoreCase("none"))
-						p.sendMessage(ChatColor.translateAlternateColorCodes(
-								'&', ba.getMessage()));
+				if (ba.hasMessage()) {
+					p.sendMessage(ChatColor.translateAlternateColorCodes('&',
+							ba.getMessage()));
 				}
 
 				// Get Commands
-				if (ba.getCommand() != null) {
-					String command = ba.getCommand();
-					if (!command.equalsIgnoreCase("none"))
-						p.performCommand(command);
+				if (ba.hasCommand()) {
+					p.performCommand(ba.getCommand());
 				}
 			}
 		}

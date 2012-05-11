@@ -17,7 +17,7 @@ public class ButtonApi {
 		this.y = y;
 		this.z = z;
 	}
-	
+
 	public String getMessage() {
 		ButtonTable bt = plugin.getDatabase().find(ButtonTable.class).where()
 				.ieq("world", world).eq("x", x).eq("y", y).eq("z", z)
@@ -27,7 +27,7 @@ public class ButtonApi {
 
 		return null;
 	}
-	
+
 	public void setMessage(String s) {
 		ButtonTable bt = plugin.getDatabase().find(ButtonTable.class).where()
 				.ieq("world", world).eq("x", x).eq("y", y).eq("z", z)
@@ -132,7 +132,7 @@ public class ButtonApi {
 			plugin.getDatabase().save(bt);
 		}
 	}
-	
+
 	public String getCommand() {
 		ButtonTable bt = plugin.getDatabase().find(ButtonTable.class).where()
 				.ieq("world", world).eq("x", x).eq("y", y).eq("z", z)
@@ -142,7 +142,7 @@ public class ButtonApi {
 
 		return null;
 	}
-	
+
 	public void setCommand(String s) {
 		ButtonTable bt = plugin.getDatabase().find(ButtonTable.class).where()
 				.ieq("world", world).eq("x", x).eq("y", y).eq("z", z)
@@ -169,11 +169,58 @@ public class ButtonApi {
 		}
 	}
 
+	public boolean hasMessage() {
+		try {
+			String msg = this.getMessage();
+			if (!msg.equalsIgnoreCase("none")) {
+				return true;
+			}
+		} catch (Exception exc) {
+			return false;
+		}
+		return false;
+	}
+
+	public boolean hasWarp() {
+		try {
+			Location loc = this.getWarp();
+			if (!loc.getWorld().getName().equalsIgnoreCase("none")) {
+				return true;
+			}
+		} catch (Exception exc) {
+			return false;
+		}
+		return false;
+	}
+
+	public boolean hasGroup() {
+		try {
+			String grp = this.getGroup();
+			if (!grp.equalsIgnoreCase("none"))
+				return true;
+		} catch (Exception exc) {
+			return false;
+		}
+		return false;
+	}
+
+	public boolean hasCommand() {
+		try {
+			String cmd = this.getCommand();
+			if (!cmd.equalsIgnoreCase("none"))
+				return true;
+		} catch (Exception exc) {
+			return false;
+		}
+		return false;
+	}
+
 	public void clearButton() {
 		ButtonTable bt = plugin.getDatabase().find(ButtonTable.class).where()
 				.ieq("world", world).eq("x", x).eq("y", y).eq("z", z)
 				.findUnique();
-		if(bt != null)
+		if (bt != null) {
 			plugin.getDatabase().delete(bt);
+		} else {}
 	}
 }

@@ -66,6 +66,8 @@ public class ButtonPromote extends JavaPlugin {
 				+ "- Set a button to promote users to the specified group.");
 		s.sendMessage("/bp setmessage <message> " + ChatColor.GOLD
 				+ "- Set a button to send users the specified message.");
+		s.sendMessage("/bp setcommand <command> " + ChatColor.GOLD
+				+ "- Set a button perform a command by the player.");
 		s.sendMessage("/bp setwarp " + ChatColor.GOLD
 				+ "- Set a button to warp users to your current location.");
 		s.sendMessage("/bp remove " + ChatColor.GOLD

@@ -65,12 +65,13 @@ public class ButtonCommand implements CommandExecutor {
 				return true;
 			}
 			plugin.cancelSelections(p);
-			String message = args[1];
-			for (int i = 2; i < args.length; i++) {
-				message += " " + args[i];
+			StringBuilder msg = new StringBuilder();
+			for (String loop : args) {
+				if(!loop.equalsIgnoreCase("setmessage"))
+					msg.append(loop + " ");
 			}
 			ButtonPromote.selecting.put(p, "message");
-			ButtonPromote.messaging.put(p, message);
+			ButtonPromote.messaging.put(p, msg.toString());
 			sender.sendMessage(ChatColor.AQUA
 					+ "Click a button to add this message to it! To cancel selection, type  "
 					+ ChatColor.WHITE + "/bp cancel");
@@ -87,7 +88,7 @@ public class ButtonCommand implements CommandExecutor {
 			plugin.cancelSelections(p);
 			ButtonPromote.selecting.put(p, "remove");
 			sender.sendMessage(ChatColor.AQUA
-					+ "Right-click a button to remove it's promotion!");
+					+ "Right-click a button to remove it's ButtonPromote features!");
 			return true;
 		}
 
@@ -105,6 +106,26 @@ public class ButtonCommand implements CommandExecutor {
 					+ "Click a button to add a warp to this location! To cancel selection, type "
 					+ ChatColor.WHITE + "/bp cancel");
 			return true;
+		}
+		
+		// Set Commands
+		if (args[0].equalsIgnoreCase("setcommand")) {
+			if (!ButtonPromote.permissions.has(p, "buttonpromote.create")) {
+				sender.sendMessage(ChatColor.RED
+						+ "You do not have permission to set button warps!");
+				return true;
+			}
+			plugin.cancelSelections(p);
+			ButtonPromote.selecting.put(p, "command");
+			StringBuilder command = new StringBuilder();
+			for (String loop : args) {
+				if(!loop.equalsIgnoreCase("setcommand"))
+					command.append(loop + " ");
+			}
+			ButtonPromote.commanding.put(p, command.toString());
+			sender.sendMessage(ChatColor.AQUA
+					+ "Click a button to add this command to it! To cancel selection, type "
+					+ ChatColor.WHITE + "/bp cancel");
 		}
 
 		// Cancel Selections
