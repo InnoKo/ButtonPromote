@@ -12,47 +12,67 @@ import com.avaje.ebean.validation.NotNull;
 public class ButtonTable {
 	@Id
 	private int id;
-	
+
 	@NotEmpty
 	private String world;
-	
+
 	@NotNull
 	private double x;
-	
+
 	@NotNull
 	private double y;
-	
+
 	@NotNull
 	private double z;
-	
+
+	@NotEmpty
+	private String permission;
+
+	@NotNull
+	private boolean oneTimeUse;
+
 	@NotEmpty
 	private String message;
-	
+
 	@NotEmpty
 	private String command;
-	
+
 	@NotEmpty
 	private String groupName;
-	
+
+	@NotNull
+	private int cost;
+
 	@NotEmpty
 	private String warpWorld;
-	
+
 	@NotNull
 	private double warpX;
-	
+
 	@NotNull
 	private double warpY;
-	
+
 	@NotNull
 	private double warpZ;
-	
+
 	@NotNull
 	private float warpYaw;
 
 	@NotNull
 	private float warpPitch;
-	
-	
+
+	@NotNull
+	private int item;
+
+	@NotNull
+	private int itemDurability;
+
+	@NotNull
+	private int itemAmount;
+
+	@NotEmpty
+	private String itemAction;
+
 	public int getId() {
 		return id;
 	}
@@ -93,6 +113,22 @@ public class ButtonTable {
 		this.z = z;
 	}
 
+	public String getPermission() {
+		return permission;
+	}
+
+	public void setPermission(String permission) {
+		this.permission = permission;
+	}
+
+	public boolean isOneTimeUse() {
+		return oneTimeUse;
+	}
+
+	public void setOneTimeUse(boolean oneTimeUse) {
+		this.oneTimeUse = oneTimeUse;
+	}
+
 	public String getMessage() {
 		return message;
 	}
@@ -115,6 +151,14 @@ public class ButtonTable {
 
 	public void setGroupName(String groupName) {
 		this.groupName = groupName;
+	}
+
+	public int getCost() {
+		return cost;
+	}
+
+	public void setCost(int cost) {
+		this.cost = cost;
 	}
 
 	public String getWarpWorld() {
@@ -163,5 +207,37 @@ public class ButtonTable {
 
 	public void setWarpPitch(float warpPitch) {
 		this.warpPitch = warpPitch;
+	}
+
+	public int getItem() {
+		return item;
+	}
+
+	public void setItem(int item) {
+		this.item = item;
+	}
+
+	public int getItemDurability() {
+		return itemDurability;
+	}
+
+	public void setItemDurability(int itemDurability) {
+		this.itemDurability = itemDurability;
+	}
+
+	public int getItemAmount() {
+		return itemAmount;
+	}
+
+	public void setItemAmount(int itemAmount) {
+		this.itemAmount = itemAmount;
+	}
+
+	public String getItemAction() {
+		return itemAction;
+	}
+
+	public void setItemAction(String itemAction) {
+		this.itemAction = itemAction;
 	}
 }

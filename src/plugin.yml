@@ -1,0 +1,14 @@
+name: ButtonPromote
+main: me.iMint.ButtonPromote.ButtonPromote
+version: 2.1
+authors: [iMint, furt]
+depend: [Vault]
+database: true
+commands:
+    buttonpromote:
+      aliases:
+        - bp
+        - bpromote
+      description: Main command.
+      usage: /<command>
+            

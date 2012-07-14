@@ -1,6 +1,7 @@
 package me.iMint.ButtonPromote;
 
 import org.bukkit.Location;
+import org.bukkit.inventory.ItemStack;
 
 public class ButtonApi {
 
@@ -18,6 +19,73 @@ public class ButtonApi {
 		this.z = z;
 	}
 
+	public void checkButton() {
+		ButtonTable bt = plugin.getDatabase().find(ButtonTable.class).where()
+				.ieq("world", world).eq("x", x).eq("y", y).eq("z", z)
+				.findUnique();
+		if (bt == null) {
+			bt = new ButtonTable();
+			bt.setX(x);
+			bt.setY(y);
+			bt.setZ(z);
+			bt.setWorld(world);
+			bt.setPermission("none");
+			bt.setOneTimeUse(false);
+			bt.setCost(0);
+			bt.setMessage("none");
+			bt.setCommand("none");
+			bt.setGroupName("none");
+			bt.setWarpPitch(0);
+			bt.setWarpWorld("none");
+			bt.setWarpX(0);
+			bt.setWarpY(0);
+			bt.setWarpYaw(0);
+			bt.setWarpX(0);
+			bt.setItem(0);
+			bt.setItemDurability(0);
+			bt.setItemAmount(0);
+			bt.setItemAction("none");
+			plugin.getDatabase().save(bt);
+		}
+	}
+
+	public boolean hasUsed(String player, int button) {
+		try {
+			ButtonUserTable but = plugin.getDatabase()
+					.find(ButtonUserTable.class).where().ieq("name", player)
+					.eq("buttonID", button).findUnique();
+			if (but != null)
+				return true;
+
+			return false;
+		} catch (Exception exc) {
+			return false;
+		}
+
+	}
+
+	public void setUsed(String player, int button) {
+		ButtonUserTable but = new ButtonUserTable();
+		but.setName(player);
+		but.setButtonID(button);
+		plugin.getDatabase().save(but);
+	}
+
+	public boolean getOneTimeUse() {
+		ButtonTable bt = plugin.getDatabase().find(ButtonTable.class).where()
+				.ieq("world", world).eq("x", x).eq("y", y).eq("z", z)
+				.findUnique();
+		return bt.isOneTimeUse();
+	}
+
+	public void setOneTimeUse(boolean b) {
+		ButtonTable bt = plugin.getDatabase().find(ButtonTable.class).where()
+				.ieq("world", world).eq("x", x).eq("y", y).eq("z", z)
+				.findUnique();
+		bt.setOneTimeUse(b);
+		plugin.getDatabase().save(bt);
+	}
+
 	public String getMessage() {
 		ButtonTable bt = plugin.getDatabase().find(ButtonTable.class).where()
 				.ieq("world", world).eq("x", x).eq("y", y).eq("z", z)
@@ -29,29 +97,12 @@ public class ButtonApi {
 	}
 
 	public void setMessage(String s) {
+		this.checkButton();
 		ButtonTable bt = plugin.getDatabase().find(ButtonTable.class).where()
 				.ieq("world", world).eq("x", x).eq("y", y).eq("z", z)
 				.findUnique();
-		if (bt != null) {
-			bt.setMessage(s);
-			plugin.getDatabase().save(bt);
-		} else {
-			bt = new ButtonTable();
-			bt.setMessage(s);
-			bt.setCommand("none");
-			bt.setGroupName("none");
-			bt.setWarpPitch(0);
-			bt.setWarpWorld("none");
-			bt.setWarpX(0);
-			bt.setWarpY(0);
-			bt.setWarpYaw(0);
-			bt.setWarpX(0);
-			bt.setX(x);
-			bt.setY(y);
-			bt.setZ(z);
-			bt.setWorld(world);
-			plugin.getDatabase().save(bt);
-		}
+		bt.setMessage(s);
+		plugin.getDatabase().save(bt);
 	}
 
 	public Location getWarp() {
@@ -67,32 +118,16 @@ public class ButtonApi {
 	}
 
 	public void setWarp(Location loc) {
+		this.checkButton();
 		ButtonTable bt = plugin.getDatabase().find(ButtonTable.class).where()
 				.ieq("world", world).eq("x", x).eq("y", y).eq("z", z)
 				.findUnique();
-		if (bt != null) {
-			bt.setWarpX(loc.getX());
-			bt.setWarpY(loc.getY());
-			bt.setWarpZ(loc.getZ());
-			bt.setWarpYaw(loc.getYaw());
-			bt.setWarpPitch(loc.getPitch());
-			bt.setWarpWorld(loc.getWorld().getName());
-		} else {
-			bt = new ButtonTable();
-			bt.setWarpX(loc.getX());
-			bt.setWarpY(loc.getY());
-			bt.setWarpZ(loc.getZ());
-			bt.setWarpYaw(loc.getYaw());
-			bt.setWarpPitch(loc.getPitch());
-			bt.setWarpWorld(loc.getWorld().getName());
-			bt.setMessage("none");
-			bt.setCommand("none");
-			bt.setGroupName("none");
-			bt.setX(x);
-			bt.setY(y);
-			bt.setZ(z);
-			bt.setWorld(world);
-		}
+		bt.setWarpX(loc.getX());
+		bt.setWarpY(loc.getY());
+		bt.setWarpZ(loc.getZ());
+		bt.setWarpYaw(loc.getYaw());
+		bt.setWarpPitch(loc.getPitch());
+		bt.setWarpWorld(loc.getWorld().getName());
 		plugin.getDatabase().save(bt);
 
 	}
@@ -108,29 +143,12 @@ public class ButtonApi {
 	}
 
 	public void setGroup(String s) {
+		this.checkButton();
 		ButtonTable bt = plugin.getDatabase().find(ButtonTable.class).where()
 				.ieq("world", world).eq("x", x).eq("y", y).eq("z", z)
 				.findUnique();
-		if (bt != null) {
-			bt.setGroupName(s);
-			plugin.getDatabase().save(bt);
-		} else {
-			bt = new ButtonTable();
-			bt.setGroupName(s);
-			bt.setMessage("none");
-			bt.setCommand("none");
-			bt.setWarpPitch(0);
-			bt.setWarpWorld("none");
-			bt.setWarpX(0);
-			bt.setWarpY(0);
-			bt.setWarpYaw(0);
-			bt.setWarpX(0);
-			bt.setX(x);
-			bt.setY(y);
-			bt.setZ(z);
-			bt.setWorld(world);
-			plugin.getDatabase().save(bt);
-		}
+		bt.setGroupName(s);
+		plugin.getDatabase().save(bt);
 	}
 
 	public String getCommand() {
@@ -144,29 +162,107 @@ public class ButtonApi {
 	}
 
 	public void setCommand(String s) {
+		this.checkButton();
 		ButtonTable bt = plugin.getDatabase().find(ButtonTable.class).where()
 				.ieq("world", world).eq("x", x).eq("y", y).eq("z", z)
 				.findUnique();
-		if (bt != null) {
-			bt.setCommand(s);
-			plugin.getDatabase().save(bt);
-		} else {
-			bt = new ButtonTable();
-			bt.setCommand(s);
-			bt.setMessage("none");
-			bt.setGroupName("none");
-			bt.setWarpPitch(0);
-			bt.setWarpWorld("none");
-			bt.setWarpX(0);
-			bt.setWarpY(0);
-			bt.setWarpYaw(0);
-			bt.setWarpX(0);
-			bt.setX(x);
-			bt.setY(y);
-			bt.setZ(z);
-			bt.setWorld(world);
-			plugin.getDatabase().save(bt);
+		bt.setCommand(s);
+		plugin.getDatabase().save(bt);
+	}
+
+	public String getPermission() {
+		ButtonTable bt = plugin.getDatabase().find(ButtonTable.class).where()
+				.ieq("world", world).eq("x", x).eq("y", y).eq("z", z)
+				.findUnique();
+		return bt.getPermission();
+
+	}
+
+	public void setPermission(String s) {
+		this.checkButton();
+		ButtonTable bt = plugin.getDatabase().find(ButtonTable.class).where()
+				.ieq("world", world).eq("x", x).eq("y", y).eq("z", z)
+				.findUnique();
+		bt.setPermission(s);
+		plugin.getDatabase().save(bt);
+	}
+
+	public ItemStack getItem() {
+		ButtonTable bt = plugin.getDatabase().find(ButtonTable.class).where()
+				.ieq("world", world).eq("x", x).eq("y", y).eq("z", z)
+				.findUnique();
+		ItemStack i = new ItemStack(bt.getItem());
+		i.setDurability((short) bt.getItemDurability());
+		i.setAmount(bt.getItemAmount());
+		return i;
+	}
+
+	public void setItem(ItemStack i) {
+		this.checkButton();
+		ButtonTable bt = plugin.getDatabase().find(ButtonTable.class).where()
+				.ieq("world", world).eq("x", x).eq("y", y).eq("z", z)
+				.findUnique();
+		bt.setItem(i.getTypeId());
+		bt.setItemDurability(i.getDurability());
+		bt.setItemAmount(i.getAmount());
+		plugin.getDatabase().save(bt);
+	}
+
+	public String getItemAction() {
+		ButtonTable bt = plugin.getDatabase().find(ButtonTable.class).where()
+				.ieq("world", world).eq("x", x).eq("y", y).eq("z", z)
+				.findUnique();
+		return bt.getItemAction();
+	}
+
+	public void setItemAction(String s) {
+		this.checkButton();
+		ButtonTable bt = plugin.getDatabase().find(ButtonTable.class).where()
+				.ieq("world", world).eq("x", x).eq("y", y).eq("z", z)
+				.findUnique();
+		bt.setItemAction(s);
+		plugin.getDatabase().save(bt);
+	}
+
+	public int getCost() {
+		ButtonTable bt = plugin.getDatabase().find(ButtonTable.class).where()
+				.ieq("world", world).eq("x", x).eq("y", y).eq("z", z)
+				.findUnique();
+		return bt.getCost();
+
+	}
+
+	public void setCost(int i) {
+		this.checkButton();
+		ButtonTable bt = plugin.getDatabase().find(ButtonTable.class).where()
+				.ieq("world", world).eq("x", x).eq("y", y).eq("z", z)
+				.findUnique();
+		bt.setCost(i);
+		plugin.getDatabase().save(bt);
+	}
+
+	public boolean hasCost() {
+		try {
+			int cost = this.getCost();
+			if (cost != 0)
+				return true;
+		} catch (Exception exc) {
+			return false;
 		}
+		return false;
+
+	}
+
+	public boolean hasPermission() {
+		try {
+			String perm = this.getPermission();
+			if (!perm.equalsIgnoreCase("none")) {
+				return true;
+			}
+		} catch (Exception exc) {
+			return false;
+		}
+		return false;
 	}
 
 	public boolean hasMessage() {
@@ -215,12 +311,26 @@ public class ButtonApi {
 		return false;
 	}
 
+	public boolean hasItem() {
+		try {
+			ItemStack iName = this.getItem();
+			if (iName.getAmount() != 0) {
+				return true;
+			}
+		} catch (Exception exc) {
+			return false;
+		}
+		return false;
+	}
+
 	public void clearButton() {
-		ButtonTable bt = plugin.getDatabase().find(ButtonTable.class).where()
-				.ieq("world", world).eq("x", x).eq("y", y).eq("z", z)
-				.findUnique();
-		if (bt != null) {
+		try {
+			ButtonTable bt = plugin.getDatabase().find(ButtonTable.class)
+					.where().ieq("world", world).eq("x", x).eq("y", y)
+					.eq("z", z).findUnique();
 			plugin.getDatabase().delete(bt);
-		} else {}
+		} catch (Exception exc) {
+			plugin.getServer().broadcastMessage("Could not delete button.");
+		}
 	}
 }

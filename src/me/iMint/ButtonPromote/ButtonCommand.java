@@ -67,7 +67,7 @@ public class ButtonCommand implements CommandExecutor {
 			plugin.cancelSelections(p);
 			StringBuilder msg = new StringBuilder();
 			for (String loop : args) {
-				if(!loop.equalsIgnoreCase("setmessage"))
+				if (!loop.equalsIgnoreCase("setmessage"))
 					msg.append(loop + " ");
 			}
 			ButtonPromote.selecting.put(p, "message");
@@ -107,7 +107,7 @@ public class ButtonCommand implements CommandExecutor {
 					+ ChatColor.WHITE + "/bp cancel");
 			return true;
 		}
-		
+
 		// Set Commands
 		if (args[0].equalsIgnoreCase("setcommand")) {
 			if (!ButtonPromote.permissions.has(p, "buttonpromote.create")) {
@@ -119,7 +119,7 @@ public class ButtonCommand implements CommandExecutor {
 			ButtonPromote.selecting.put(p, "command");
 			StringBuilder command = new StringBuilder();
 			for (String loop : args) {
-				if(!loop.equalsIgnoreCase("setcommand"))
+				if (!loop.equalsIgnoreCase("setcommand"))
 					command.append(loop + " ");
 			}
 			ButtonPromote.commanding.put(p, command.toString());

@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javax.persistence.PersistenceException;
 
 import net.milkbowl.vault.permission.Permission;
@@ -22,7 +20,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class ButtonPromote extends JavaPlugin {
 
-	public Logger log = Logger.getLogger("Minecraft");
 	public static Permission permissions = null;
 	public static HashMap<Player, String> selecting = new HashMap<Player, String>();
 	public static HashMap<Player, String> commanding = new HashMap<Player, String>();
@@ -32,7 +29,12 @@ public class ButtonPromote extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		log.info("ButtonPromote by iMint is now disabled.");
+		selecting.clear();
+		commanding.clear();
+		messaging.clear();
+		promoting.clear();
+		warping.clear();
+		this.getLogger().log(Level.INFO, "Disabled");
 	}
 
 	@Override
@@ -40,11 +42,11 @@ public class ButtonPromote extends JavaPlugin {
 		PluginDescriptionFile pdf = this.getDescription();
 		setupDatabase();
 		setupPermissions();
-		getCommand("bp").setExecutor(new ButtonCommand(this));
+		getCommand("buttonpromote").setExecutor(new ButtonCommand(this));
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new ButtonListener(this), this);
-		log.info("ButtonPromote v" + pdf.getVersion()
-				+ " by iMint is now enabled!");
+		this.getLogger().log(Level.INFO,
+				"v" + pdf.getVersion() + " is now enabled!");
 	}
 
 	// Set up Vault permissions
@@ -100,8 +102,9 @@ public class ButtonPromote extends JavaPlugin {
 			}
 
 			getDatabase().find(ButtonTable.class).findRowCount();
+			getDatabase().find(ButtonUserTable.class).findRowCount();
 		} catch (PersistenceException ex) {
-			this.log.log(Level.INFO, "Installing database.");
+			this.getLogger().log(Level.INFO, "Installing database.");
 			installDDL();
 		}
 	}
@@ -110,6 +113,7 @@ public class ButtonPromote extends JavaPlugin {
 	public List<Class<?>> getDatabaseClasses() {
 		List<Class<?>> list = new ArrayList<Class<?>>();
 		list.add(ButtonTable.class);
+		list.add(ButtonUserTable.class);
 		return list;
 	}
 }
