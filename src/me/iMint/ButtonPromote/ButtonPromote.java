@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.logging.Level;
 import javax.persistence.PersistenceException;
 
+import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -21,19 +22,28 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class ButtonPromote extends JavaPlugin {
 
 	public static Permission permissions = null;
+	public static Economy economy = null;
 	public static HashMap<Player, String> selecting = new HashMap<Player, String>();
 	public static HashMap<Player, String> commanding = new HashMap<Player, String>();
 	public static HashMap<Player, String> messaging = new HashMap<Player, String>();
 	public static HashMap<Player, String> promoting = new HashMap<Player, String>();
 	public static HashMap<Player, Location> warping = new HashMap<Player, Location>();
+	public static HashMap<Player, String> itemGiving = new HashMap<Player, String>();
+	public static HashMap<Player, String> permGiving = new HashMap<Player, String>();
+	public static HashMap<Player, String> currency = new HashMap<Player, String>();
+	public static HashMap<Player, Boolean> usage = new HashMap<Player, Boolean>();
 
 	@Override
 	public void onDisable() {
 		selecting.clear();
-		commanding.clear();
-		messaging.clear();
 		promoting.clear();
 		warping.clear();
+		messaging.clear();
+		commanding.clear();
+		itemGiving.clear();
+		permGiving.clear();
+		currency.clear();
+		usage.clear();
 		this.getLogger().log(Level.INFO, "Disabled");
 	}
 
@@ -42,6 +52,7 @@ public class ButtonPromote extends JavaPlugin {
 		PluginDescriptionFile pdf = this.getDescription();
 		setupDatabase();
 		setupPermissions();
+		setupEconomy();
 		getCommand("buttonpromote").setExecutor(new ButtonCommand(this));
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new ButtonListener(this), this);
@@ -60,6 +71,18 @@ public class ButtonPromote extends JavaPlugin {
 		return (permissions != null);
 	}
 
+	// Set up Vault economy
+	private boolean setupEconomy() {
+		RegisteredServiceProvider<Economy> economyProvider = getServer()
+				.getServicesManager().getRegistration(
+						net.milkbowl.vault.economy.Economy.class);
+		if (economyProvider != null) {
+			economy = economyProvider.getProvider();
+		}
+
+		return (economy != null);
+	}
+
 	// Show command usage to a player
 	public void sendUsage(CommandSender s) {
 		s.sendMessage(ChatColor.GRAY
@@ -72,6 +95,12 @@ public class ButtonPromote extends JavaPlugin {
 				+ "- Set a button perform a command by the player.");
 		s.sendMessage("/bp setwarp " + ChatColor.GOLD
 				+ "- Set a button to warp users to your current location.");
+		s.sendMessage("/bp setitem <give/take> <item-name> <amount> "
+				+ ChatColor.GOLD + "- Set a button to give or take item/s.");
+		s.sendMessage("/bp setcurrency <give/take> <amount> " + ChatColor.GOLD
+				+ "- Set a button to give or take currency.");
+		s.sendMessage("/bp setusage <true/false> " + ChatColor.GOLD
+				+ "- Set a button to only be used once.");
 		s.sendMessage("/bp remove " + ChatColor.GOLD
 				+ "- Remove group promotion from a button.");
 		s.sendMessage("/bp cancel " + ChatColor.GOLD
@@ -88,6 +117,10 @@ public class ButtonPromote extends JavaPlugin {
 		warping.remove(p);
 		messaging.remove(p);
 		commanding.remove(p);
+		itemGiving.remove(p);
+		permGiving.remove(p);
+		currency.remove(p);
+		usage.remove(p);
 	}
 
 	private void setupDatabase() {

@@ -41,7 +41,10 @@ public class ButtonTable {
 	private String groupName;
 
 	@NotNull
-	private int cost;
+	private int currency;
+	
+	@NotEmpty
+	private String currencyAction;
 
 	@NotEmpty
 	private String warpWorld;
@@ -153,12 +156,20 @@ public class ButtonTable {
 		this.groupName = groupName;
 	}
 
-	public int getCost() {
-		return cost;
+	public int getCurrency() {
+		return currency;
 	}
 
-	public void setCost(int cost) {
-		this.cost = cost;
+	public void setCurrency(int cost) {
+		this.currency = cost;
+	}
+
+	public String getCurrencyAction() {
+		return currencyAction;
+	}
+
+	public void setCurrencyAction(String currencyAction) {
+		this.currencyAction = currencyAction;
 	}
 
 	public String getWarpWorld() {

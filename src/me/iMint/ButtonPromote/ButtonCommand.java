@@ -1,6 +1,7 @@
 package me.iMint.ButtonPromote;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -126,6 +127,74 @@ public class ButtonCommand implements CommandExecutor {
 			sender.sendMessage(ChatColor.AQUA
 					+ "Click a button to add this command to it! To cancel selection, type "
 					+ ChatColor.WHITE + "/bp cancel");
+		}
+
+		// Set Permissions
+		if (args[0].equalsIgnoreCase("setpermission")) {
+			if (!ButtonPromote.permissions.has(p, "buttonpromote.create")) {
+				sender.sendMessage(ChatColor.RED
+						+ "You do not have permission to set button permissions!");
+				return true;
+			}
+
+			plugin.cancelSelections(p);
+			ButtonPromote.selecting.put(p, "permission");
+			ButtonPromote.permGiving.put(p, args[1]);
+			sender.sendMessage(ChatColor.AQUA
+					+ "Click a button to add a custom permission to it! To cancel selection, type "
+					+ ChatColor.WHITE + "/bp cancel");
+		}
+
+		// Set Item
+		if (args.length == 4 && args[0].equalsIgnoreCase("setitem")) {
+			if (!ButtonPromote.permissions.has(p, "buttonpromote.create")) {
+				sender.sendMessage(ChatColor.RED
+						+ "You do not have permission to set button items!");
+				return true;
+			}
+
+			plugin.cancelSelections(p);
+			Material m = Material.matchMaterial(args[2]);
+			if (m != null) {
+				ButtonPromote.selecting.put(p, "item");
+				ButtonPromote.itemGiving.put(p, args[1] + ":" + m.name() + ":"
+						+ args[3]);
+				sender.sendMessage(ChatColor.AQUA
+						+ "Click a button to give/take items from players! To cancel selection, type "
+						+ ChatColor.WHITE + "/bp cancel");
+			} else {
+				sender.sendMessage(ChatColor.RED
+						+ "Item name was not found please try again.");
+			}
+		}
+
+		// Set Use
+		if (args.length == 2 && args[0].equalsIgnoreCase("setusage")) {
+			if (!ButtonPromote.permissions.has(p, "buttonpromote.create")) {
+				sender.sendMessage(ChatColor.RED
+						+ "You do not have permission to set one time use!");
+				return true;
+			}
+
+			plugin.cancelSelections(p);
+			ButtonPromote.selecting.put(p, "usage");
+			ButtonPromote.usage.put(p, Boolean.parseBoolean(args[1]));
+			sender.sendMessage(ChatColor.AQUA
+					+ "Click a button to give/remove the one time use feature! To cancel selection, type "
+					+ ChatColor.WHITE + "/bp cancel");
+		}
+
+		// Set Economy
+		if (args.length == 3 && args[0].equalsIgnoreCase("setcurrency")) {
+			if (!ButtonPromote.permissions.has(p, "buttonpromote.create")) {
+				sender.sendMessage(ChatColor.RED
+						+ "You do not have permission to set economy costs!");
+				return true;
+			}
+
+			plugin.cancelSelections(p);
+			ButtonPromote.selecting.put(p, "economy");
+			ButtonPromote.currency.put(p, args[1] + ":" + args[2]);
 		}
 
 		// Cancel Selections
