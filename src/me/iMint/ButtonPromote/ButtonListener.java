@@ -1,5 +1,7 @@
 package me.iMint.ButtonPromote;
 
+import net.milkbowl.vault.economy.EconomyResponse;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -91,7 +93,14 @@ public class ButtonListener implements Listener {
 						+ split[0] + " items!");
 				// Set one time usage
 			} else if (ButtonPromote.selecting.get(p).equalsIgnoreCase("usage")) {
-				// TODO finish one time use
+				boolean bool = ButtonPromote.usage.get(p);
+				ba.setOneTimeUse(bool);
+				if (bool)
+					p.sendMessage(ChatColor.GREEN
+							+ "This button now has one time use enabled!");
+				else
+					p.sendMessage(ChatColor.GREEN
+							+ "This button now has one time use disabled!");
 			} else {
 				p.sendMessage("Unknown command value reseting selection.");
 				plugin.cancelSelections(p);
@@ -113,8 +122,32 @@ public class ButtonListener implements Listener {
 						p.sendMessage(ChatColor.GREEN
 								+ "You have already used this button");
 						return;
-					} else {
-						ba.setUsed(p.getName(), ba.getID());
+					}
+				}
+				
+				// Check to see if there is a economy plugin first
+				if (ButtonPromote.econ) {
+					// Get currency
+					if (ba.hasCurrency()) {
+						String action = ba.getCurrencyAction();
+						if (action.equalsIgnoreCase("give")) {
+							EconomyResponse cash = ButtonPromote.economy.depositPlayer(p.getName(), ba.getCurrency());
+							if (cash.transactionSuccess())
+								p.sendMessage(ChatColor.GREEN + "" + ba.getCurrency() + " " + ButtonPromote.economy
+										.currencyNamePlural() + " has been added to your account!");
+						} else if (action.equalsIgnoreCase("take")) {
+							EconomyResponse cash = ButtonPromote.economy
+									.withdrawPlayer(p.getName(),
+											ba.getCurrency());
+							if (!cash.transactionSuccess()) {
+								p.sendMessage(ChatColor.RED
+										+ "You do not have enough "
+										+ ButtonPromote.economy
+												.currencyNameSingular()
+										+ " to use this button");
+								return;
+							}
+						}
 					}
 				}
 
@@ -144,12 +177,6 @@ public class ButtonListener implements Listener {
 					}
 				}
 
-				// Get Messages
-				if (ba.hasMessage()) {
-					p.sendMessage(ChatColor.translateAlternateColorCodes('&',
-							ba.getMessage()));
-				}
-
 				// Get Commands
 				if (ba.hasCommand()) {
 					p.performCommand(ba.getCommand());
@@ -165,12 +192,16 @@ public class ButtonListener implements Listener {
 						p.getInventory().remove(item);
 					}
 				}
-
-				// Get currency
-				if (ba.hasCurrency()) {
-					// TODO finish currency
+				
+				// Get Messages
+				if (ba.hasMessage()) {
+					p.sendMessage(ChatColor.translateAlternateColorCodes('&',
+							ba.getMessage()));
 				}
-
+				
+				// If button is one time use add player to user table
+				if (ba.getOneTimeUse())
+					ba.setUsed(p.getName(), ba.getID());
 			}
 		}
 	}

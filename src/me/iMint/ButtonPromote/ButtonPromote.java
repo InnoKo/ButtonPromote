@@ -23,6 +23,7 @@ public class ButtonPromote extends JavaPlugin {
 
 	public static Permission permissions = null;
 	public static Economy economy = null;
+	public static boolean econ = false;
 	public static HashMap<Player, String> selecting = new HashMap<Player, String>();
 	public static HashMap<Player, String> commanding = new HashMap<Player, String>();
 	public static HashMap<Player, String> messaging = new HashMap<Player, String>();
@@ -78,6 +79,9 @@ public class ButtonPromote extends JavaPlugin {
 						net.milkbowl.vault.economy.Economy.class);
 		if (economyProvider != null) {
 			economy = economyProvider.getProvider();
+		}
+		if (economy != null) {
+			econ = true;
 		}
 
 		return (economy != null);
