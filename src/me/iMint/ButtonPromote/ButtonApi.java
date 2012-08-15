@@ -492,6 +492,20 @@ public class ButtonApi {
 
 	/**
 	 * 
+	 * @return
+	 */
+	public boolean hasOneTimeUse() {
+		try {
+			boolean b = this.getOneTimeUse();
+			return b;
+
+		} catch (Exception exc) {
+			return false;
+		}
+	}
+
+	/**
+	 * 
 	 * @param p
 	 * @return
 	 */

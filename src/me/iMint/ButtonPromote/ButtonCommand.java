@@ -79,7 +79,7 @@ public class ButtonCommand implements CommandExecutor {
 			return true;
 		}
 
-		// Remove Promotions
+		// Remove Features
 		if (args[0].equalsIgnoreCase("remove")) {
 			if (!ButtonPromote.permissions.has(p, "buttonpromote.remove")) {
 				sender.sendMessage(ChatColor.RED
@@ -195,6 +195,9 @@ public class ButtonCommand implements CommandExecutor {
 			plugin.cancelSelections(p);
 			ButtonPromote.selecting.put(p, "economy");
 			ButtonPromote.currency.put(p, args[1] + ":" + args[2]);
+			sender.sendMessage(ChatColor.AQUA
+					+ "Click a button to give/take currency from players! To cancel selection, type "
+					+ ChatColor.WHITE + "/bp cancel");
 		}
 
 		// Cancel Selections

@@ -35,7 +35,7 @@ public class ButtonListener implements Listener {
 				b.getZ());
 
 		if (ButtonPromote.selecting.containsKey(p)) {
-			// Set Promotions
+			// Set Group
 			if (ButtonPromote.selecting.get(p).equalsIgnoreCase("promote")) {
 				ba.setGroup(ButtonPromote.promoting.get(p));
 				event.getPlayer().sendMessage(
@@ -43,19 +43,22 @@ public class ButtonListener implements Listener {
 								+ "This button will now promote users to "
 								+ ButtonPromote.selecting.get(p));
 				plugin.cancelSelections(p);
-				// Remove Promotions
+
+				// Remove Features
 			} else if (ButtonPromote.selecting.get(p)
 					.equalsIgnoreCase("remove")) {
 				if (ba.clearButton(p))
 					p.sendMessage(ChatColor.GREEN
-							+ "This button will no longer promote users.");
+							+ "This button no longer has ButtonPromote features.");
 				plugin.cancelSelections(p);
+
 				// Set Warps
 			} else if (ButtonPromote.selecting.get(p).equalsIgnoreCase("warp")) {
 				ba.setWarp(ButtonPromote.warping.get(p));
 				p.sendMessage(ChatColor.GREEN
 						+ "This button will now warp players to the set location!");
 				plugin.cancelSelections(p);
+
 				// Set Message
 			} else if (ButtonPromote.selecting.get(p).equalsIgnoreCase(
 					"message")) {
@@ -63,6 +66,7 @@ public class ButtonListener implements Listener {
 				p.sendMessage(ChatColor.GREEN
 						+ "This button will now send players that message!");
 				plugin.cancelSelections(p);
+
 				// Set Command
 			} else if (ButtonPromote.selecting.get(p).equalsIgnoreCase(
 					"command")) {
@@ -71,6 +75,7 @@ public class ButtonListener implements Listener {
 						+ "This button will now execute the command "
 						+ ButtonPromote.commanding.get(p));
 				plugin.cancelSelections(p);
+
 				// Set Currency
 			} else if (ButtonPromote.selecting.get(p).equalsIgnoreCase(
 					"economy")) {
@@ -80,6 +85,8 @@ public class ButtonListener implements Listener {
 				ba.setCurrencyAction(split[0]);
 				p.sendMessage(ChatColor.GREEN + "This button will now "
 						+ split[0] + " currency!");
+				plugin.cancelSelections(p);
+
 				// Set Item
 			} else if (ButtonPromote.selecting.get(p).equalsIgnoreCase("item")) {
 				String data = ButtonPromote.itemGiving.get(p);
@@ -91,16 +98,21 @@ public class ButtonListener implements Listener {
 				ba.setItemAction(split[0]);
 				p.sendMessage(ChatColor.GREEN + "This button will now "
 						+ split[0] + " items!");
+				plugin.cancelSelections(p);
+
 				// Set one time usage
 			} else if (ButtonPromote.selecting.get(p).equalsIgnoreCase("usage")) {
 				boolean bool = ButtonPromote.usage.get(p);
 				ba.setOneTimeUse(bool);
-				if (bool)
+				if (bool) {
 					p.sendMessage(ChatColor.GREEN
 							+ "This button now has one time use enabled!");
-				else
+					plugin.cancelSelections(p);
+				} else {
 					p.sendMessage(ChatColor.GREEN
 							+ "This button now has one time use disabled!");
+					plugin.cancelSelections(p);
+				}
 			} else {
 				p.sendMessage("Unknown command value reseting selection.");
 				plugin.cancelSelections(p);
@@ -116,7 +128,7 @@ public class ButtonListener implements Listener {
 					}
 				}
 				// Check for one time use
-				if (ba.getOneTimeUse()) {
+				if (ba.hasOneTimeUse()) {
 					// Make sure user has not used the button already
 					if (ba.hasUsed(p.getName(), ba.getID())) {
 						p.sendMessage(ChatColor.GREEN
@@ -124,17 +136,24 @@ public class ButtonListener implements Listener {
 						return;
 					}
 				}
-				
+
 				// Check to see if there is a economy plugin first
 				if (ButtonPromote.econ) {
 					// Get currency
 					if (ba.hasCurrency()) {
 						String action = ba.getCurrencyAction();
 						if (action.equalsIgnoreCase("give")) {
-							EconomyResponse cash = ButtonPromote.economy.depositPlayer(p.getName(), ba.getCurrency());
+							EconomyResponse cash = ButtonPromote.economy
+									.depositPlayer(p.getName(),
+											ba.getCurrency());
 							if (cash.transactionSuccess())
-								p.sendMessage(ChatColor.GREEN + "" + ba.getCurrency() + " " + ButtonPromote.economy
-										.currencyNamePlural() + " has been added to your account!");
+								p.sendMessage(ChatColor.GREEN
+										+ ""
+										+ ba.getCurrency()
+										+ " "
+										+ ButtonPromote.economy
+												.currencyNamePlural()
+										+ " has been added to your account!");
 						} else if (action.equalsIgnoreCase("take")) {
 							EconomyResponse cash = ButtonPromote.economy
 									.withdrawPlayer(p.getName(),
@@ -192,15 +211,15 @@ public class ButtonListener implements Listener {
 						p.getInventory().remove(item);
 					}
 				}
-				
+
 				// Get Messages
 				if (ba.hasMessage()) {
 					p.sendMessage(ChatColor.translateAlternateColorCodes('&',
 							ba.getMessage()));
 				}
-				
+
 				// If button is one time use add player to user table
-				if (ba.getOneTimeUse())
+				if (ba.hasOneTimeUse())
 					ba.setUsed(p.getName(), ba.getID());
 			}
 		}

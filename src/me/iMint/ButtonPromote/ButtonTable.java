@@ -42,7 +42,7 @@ public class ButtonTable {
 
 	@NotNull
 	private int currency;
-	
+
 	@NotEmpty
 	private String currencyAction;
 
