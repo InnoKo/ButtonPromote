@@ -25,6 +25,7 @@ public class ButtonListener implements Listener {
 		if (event.getAction() != Action.LEFT_CLICK_BLOCK
 				&& event.getAction() != Action.RIGHT_CLICK_BLOCK)
 			return;
+
 		if (!event.getClickedBlock().getType().equals(Material.STONE_BUTTON))
 			return;
 
@@ -94,6 +95,7 @@ public class ButtonListener implements Listener {
 				ItemStack stack = new ItemStack(
 						Material.matchMaterial(split[1]),
 						Integer.parseInt(split[2]));
+				// TODO stack.setDurability();
 				ba.setItem(stack);
 				ba.setItemAction(split[0]);
 				p.sendMessage(ChatColor.GREEN + "This button will now "
@@ -139,22 +141,10 @@ public class ButtonListener implements Listener {
 
 				// Check to see if there is a economy plugin first
 				if (ButtonPromote.econ) {
-					// Get currency
+					// Take Currency
 					if (ba.hasCurrency()) {
 						String action = ba.getCurrencyAction();
-						if (action.equalsIgnoreCase("give")) {
-							EconomyResponse cash = ButtonPromote.economy
-									.depositPlayer(p.getName(),
-											ba.getCurrency());
-							if (cash.transactionSuccess())
-								p.sendMessage(ChatColor.GREEN
-										+ ""
-										+ ba.getCurrency()
-										+ " "
-										+ ButtonPromote.economy
-												.currencyNamePlural()
-										+ " has been added to your account!");
-						} else if (action.equalsIgnoreCase("take")) {
+						if (action.equalsIgnoreCase("take")) {
 							EconomyResponse cash = ButtonPromote.economy
 									.withdrawPlayer(p.getName(),
 											ba.getCurrency());
@@ -170,9 +160,43 @@ public class ButtonListener implements Listener {
 					}
 				}
 
-				// Get Warps
-				if (ba.hasWarp()) {
-					p.teleport(ba.getWarp());
+				// Take Item
+				if (ba.hasItem()) {
+					String action = ba.getItemAction();
+					ItemStack item = ba.getItem();
+					if (action.equalsIgnoreCase("take")) {
+						p.getInventory().remove(item);
+					}
+				}
+
+				// Check to see if there is a economy plugin first
+				if (ButtonPromote.econ) {
+					// Give currency
+					if (ba.hasCurrency()) {
+						String action = ba.getCurrencyAction();
+						if (action.equalsIgnoreCase("give")) {
+							EconomyResponse cash = ButtonPromote.economy
+									.depositPlayer(p.getName(),
+											ba.getCurrency());
+							if (cash.transactionSuccess())
+								p.sendMessage(ChatColor.GREEN
+										+ ""
+										+ ba.getCurrency()
+										+ " "
+										+ ButtonPromote.economy
+												.currencyNamePlural()
+										+ " has been added to your account!");
+						}
+					}
+				}
+
+				// Give Item
+				if (ba.hasItem()) {
+					String action = ba.getItemAction();
+					ItemStack item = ba.getItem();
+					if (action.equalsIgnoreCase("give")) {
+						p.getInventory().addItem(item);
+					}
 				}
 
 				// Get Promotions
@@ -201,15 +225,9 @@ public class ButtonListener implements Listener {
 					p.performCommand(ba.getCommand());
 				}
 
-				// Get Item
-				if (ba.hasItem()) {
-					String action = ba.getItemAction();
-					ItemStack item = ba.getItem();
-					if (action.equalsIgnoreCase("give")) {
-						p.getInventory().addItem(item);
-					} else if (action.equalsIgnoreCase("take")) {
-						p.getInventory().remove(item);
-					}
+				// Get Warps
+				if (ba.hasWarp()) {
+					p.teleport(ba.getWarp());
 				}
 
 				// Get Messages
