@@ -22,16 +22,38 @@ public class ButtonListener implements Listener {
 
 	@EventHandler
 	public void onButtonPress(PlayerInteractEvent event) {
-		if (event.getAction() != Action.LEFT_CLICK_BLOCK
-				&& event.getAction() != Action.RIGHT_CLICK_BLOCK)
-			return;
+        Block b = event.getClickedBlock();
+        if (b == null)
+            return;
+        
+        Action a = event.getAction();
+        switch (b.getType()) {
+            case STONE_PLATE:
+                if (a.equals(Action.PHYSICAL))
+                    break;
+                else
+                    return;
 
-		if (!event.getClickedBlock().getType().equals(Material.STONE_BUTTON))
-			return;
+            case WOOD_PLATE:
+                if (a.equals(Action.PHYSICAL))
+                    break;
+                else
+                    return;
+
+            case STONE_BUTTON:
+                switch (a) {
+                    case LEFT_CLICK_BLOCK: break;
+                    case RIGHT_CLICK_BLOCK: break;
+                    default: return;
+                }
+                
+                break;
+
+            default: return;
+        }
 
 		Player p = event.getPlayer();
 		World w = p.getWorld();
-		Block b = event.getClickedBlock();
 		ButtonApi ba = new ButtonApi(plugin, w.getName(), b.getX(), b.getY(),
 				b.getZ());
 
@@ -95,7 +117,6 @@ public class ButtonListener implements Listener {
 				ItemStack stack = new ItemStack(
 						Material.matchMaterial(split[1]),
 						Integer.parseInt(split[2]));
-				// TODO stack.setDurability();
 				ba.setItem(stack);
 				ba.setItemAction(split[0]);
 				p.sendMessage(ChatColor.GREEN + "This button will now "
