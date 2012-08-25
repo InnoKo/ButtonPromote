@@ -43,7 +43,10 @@ public class ButtonApi {
 			bt.setZ(z);
 			bt.setWorld(world);
 			bt.setPermission("none");
-			bt.setOneTimeUse(false);
+			if (plugin.getConfig().getBoolean("globalOneTimeUse"))
+				bt.setOneTimeUse(true);
+			else
+				bt.setOneTimeUse(false);
 			bt.setCurrency(0);
 			bt.setCurrencyAction("none");
 			bt.setMessage("none");

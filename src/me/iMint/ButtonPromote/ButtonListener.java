@@ -228,15 +228,19 @@ public class ButtonListener implements Listener {
 				if (ba.hasGroup()) {
 					String g = ba.getGroup();
 					if (!ButtonPromote.permissions.playerInGroup(p, g)) {
-						String[] groups = ButtonPromote.permissions
-								.getPlayerGroups(p);
-						if (groups.length != 0) {
-							for (String old : groups) {
-								ButtonPromote.permissions.playerRemoveGroup(p,
-										old);
+						if (plugin.getConfig().getBoolean("keepOldGroups")) {
+							ButtonPromote.permissions.playerAddGroup(p, g);
+						} else {
+							String[] groups = ButtonPromote.permissions
+									.getPlayerGroups(p);
+							if (groups.length != 0) {
+								for (String old : groups) {
+									ButtonPromote.permissions
+											.playerRemoveGroup(p, old);
+								}
 							}
+							ButtonPromote.permissions.playerAddGroup(p, g);
 						}
-						ButtonPromote.permissions.playerAddGroup(p, g);
 						p.sendMessage(ChatColor.GREEN
 								+ "You are now a member of " + g + "!");
 					} else {

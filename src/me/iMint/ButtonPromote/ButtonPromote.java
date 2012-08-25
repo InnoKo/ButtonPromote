@@ -50,6 +50,10 @@ public class ButtonPromote extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		if (!getDataFolder().exists())
+			getDataFolder().mkdir();
+		if (!new File(getDataFolder(), "config.yml").exists())
+			saveDefaultConfig();
 		PluginDescriptionFile pdf = this.getDescription();
 		setupDatabase();
 		setupPermissions();
