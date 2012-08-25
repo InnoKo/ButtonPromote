@@ -247,7 +247,9 @@ public class ButtonListener implements Listener {
 
 				// Get Commands
 				if (ba.hasCommand()) {
-					p.performCommand(ba.getCommand());
+					String[] cmd = ba.getCommand().split("-");
+					for (int i = 0; i < cmd.length; i++)
+						p.performCommand(cmd[i]);
 				}
 
 				// Get Warps
