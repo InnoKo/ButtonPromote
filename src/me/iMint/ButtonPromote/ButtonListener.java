@@ -22,35 +22,39 @@ public class ButtonListener implements Listener {
 
 	@EventHandler
 	public void onButtonPress(PlayerInteractEvent event) {
-        Block b = event.getClickedBlock();
-        if (b == null)
-            return;
-        
-        Action a = event.getAction();
-        switch (b.getType()) {
-            case STONE_PLATE:
-                if (a.equals(Action.PHYSICAL))
-                    break;
-                else
-                    return;
+		Block b = event.getClickedBlock();
+		if (b == null)
+			return;
 
-            case WOOD_PLATE:
-                if (a.equals(Action.PHYSICAL))
-                    break;
-                else
-                    return;
+		Action a = event.getAction();
+		switch (b.getType()) {
+		case STONE_PLATE:
+			if (a.equals(Action.PHYSICAL))
+				break;
+			else
+				return;
 
-            case STONE_BUTTON:
-                switch (a) {
-                    case LEFT_CLICK_BLOCK: break;
-                    case RIGHT_CLICK_BLOCK: break;
-                    default: return;
-                }
-                
-                break;
+		case WOOD_PLATE:
+			if (a.equals(Action.PHYSICAL))
+				break;
+			else
+				return;
 
-            default: return;
-        }
+		case STONE_BUTTON:
+			switch (a) {
+			case LEFT_CLICK_BLOCK:
+				break;
+			case RIGHT_CLICK_BLOCK:
+				break;
+			default:
+				return;
+			}
+
+			break;
+
+		default:
+			return;
+		}
 
 		Player p = event.getPlayer();
 		World w = p.getWorld();
@@ -253,8 +257,10 @@ public class ButtonListener implements Listener {
 
 				// Get Messages
 				if (ba.hasMessage()) {
-					p.sendMessage(ChatColor.translateAlternateColorCodes('&',
-							ba.getMessage()));
+					String[] msg = ba.getMessage().split("-");
+					for (int i = 0; i < msg.length; i++)
+						p.sendMessage(ChatColor.translateAlternateColorCodes(
+								'&', msg[i]));
 				}
 
 				// If button is one time use add player to user table
