@@ -153,4 +153,18 @@ public class ButtonPromote extends JavaPlugin {
 		list.add(ButtonUserTable.class);
 		return list;
 	}
+	
+	public String argument(String original, String[] arguments, String[] points) {
+		for (int i = 0; i < arguments.length; i++) {
+			if (arguments[i].contains(",")) {
+				for (String arg : arguments[i].split(",")) {
+					original = original.replace(arg, points[i]);
+				}
+			} else {
+				original = original.replace(arguments[i], points[i]);
+			}
+		}
+
+		return original;
+	}
 }

@@ -248,8 +248,14 @@ public class ButtonListener implements Listener {
 				// Get Commands
 				if (ba.hasCommand()) {
 					String[] cmd = ba.getCommand().split("-");
-					for (int i = 0; i < cmd.length; i++)
-						p.performCommand(cmd[i]);
+					String s = null;
+					for (int i = 0; i < cmd.length; i++) {
+						s = plugin.argument(cmd[i],
+								new String[] { "%p", "%w" },
+								new String[] { p.getName(),
+										p.getWorld().getName() });
+						p.performCommand(s);
+					}
 				}
 
 				// Get Warps
