@@ -1,4 +1,0 @@
-# Allows players to keep cuurent groups when being promoted by a button Default: false
-keepOldGroups: false
-# When button data is saved set one time use to true Default: false
-globalOneTimeUse: false

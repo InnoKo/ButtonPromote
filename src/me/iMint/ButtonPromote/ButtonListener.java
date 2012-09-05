@@ -262,17 +262,17 @@ public class ButtonListener implements Listener {
 					}
 				}
 
-				// Get Warps
-				if (ba.hasWarp()) {
-					p.teleport(ba.getWarp());
-				}
-
 				// Get Messages
 				if (ba.hasMessage()) {
 					String[] msg = ba.getMessage().split("-");
 					for (int i = 0; i < msg.length; i++)
 						p.sendMessage(ChatColor.translateAlternateColorCodes(
 								'&', msg[i]));
+				}
+				
+				// Get Warps
+				if (ba.hasWarp()) {
+					plugin.startTimer(p, ba.getWarp());
 				}
 
 				// If button is one time use add player to user table

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
 import java.util.logging.Level;
 import javax.persistence.PersistenceException;
 
@@ -18,6 +19,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.mcstats.Metrics;
 
 public class ButtonPromote extends JavaPlugin {
 
@@ -33,6 +35,8 @@ public class ButtonPromote extends JavaPlugin {
 	public static HashMap<Player, String> permGiving = new HashMap<Player, String>();
 	public static HashMap<Player, String> currency = new HashMap<Player, String>();
 	public static HashMap<Player, Boolean> usage = new HashMap<Player, Boolean>();
+	private ButtonTimer buttonTimer;
+	private Timer etimer = new Timer();
 
 	@Override
 	public void onDisable() {
@@ -52,8 +56,12 @@ public class ButtonPromote extends JavaPlugin {
 	public void onEnable() {
 		if (!getDataFolder().exists())
 			getDataFolder().mkdir();
-		if (!new File(getDataFolder(), "config.yml").exists())
-			saveDefaultConfig();
+		
+		this.getConfig().addDefault("keepOldGroups", false);
+		this.getConfig().addDefault("globalOneTimeUse", false);
+		this.getConfig().addDefault("warpTimer", 3);
+		this.getConfig().options().copyDefaults(true);
+		this.saveConfig();
 		PluginDescriptionFile pdf = this.getDescription();
 		setupDatabase();
 		setupPermissions();
@@ -61,6 +69,20 @@ public class ButtonPromote extends JavaPlugin {
 		getCommand("buttonpromote").setExecutor(new ButtonCommand(this));
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new ButtonListener(this), this);
+		try {
+		    Metrics metrics = new Metrics(this);
+		    metrics.addCustomData(new Metrics.Plotter("Total Buttons Used") {
+
+		        @Override
+		        public int getValue() {
+		            return getTotalButtons();
+		        }
+
+		    });
+		    metrics.start();
+		} catch (IOException e) {
+		   this.getLogger().log(Level.WARNING, "PluginMetrics could not start.");
+		}
 		this.getLogger().log(Level.INFO,
 				"v" + pdf.getVersion() + " is now enabled!");
 	}
@@ -170,5 +192,14 @@ public class ButtonPromote extends JavaPlugin {
 		}
 
 		return original;
+	}
+	
+	public int getTotalButtons() {
+		return getDatabase().find(ButtonTable.class).findRowCount();
+	}
+	
+	public void startTimer(Player p, Location loc) {
+		buttonTimer = new ButtonTimer(this, p, loc);
+		etimer.schedule(buttonTimer, getConfig().getInt("warpTimer") * 1000);
 	}
 }

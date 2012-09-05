@@ -1,7 +1,7 @@
 name: ButtonPromote
 main: me.iMint.ButtonPromote.ButtonPromote
 version: 2.3
-authors: [iMint, furt]
+authors: [furt, _InnoKo_]
 depend: [Vault]
 database: true
 commands:
