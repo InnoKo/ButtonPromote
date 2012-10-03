@@ -188,9 +188,27 @@ public class ButtonListener implements Listener {
 				// Take Item
 				if (ba.hasItem()) {
 					String action = ba.getItemAction();
-					ItemStack item = ba.getItem();
 					if (action.equalsIgnoreCase("take")) {
-						p.getInventory().remove(item);
+						ItemStack item = ba.getItem();
+						Material check = ba.getItem().getType();
+						if (p.getInventory().contains(check)) {
+							int slot = p.getInventory().first(check);
+							ItemStack stack = p.getInventory().getItem(slot);
+							if (stack.getAmount() >= item.getAmount()) {
+								int newAmount = stack.getAmount()
+										- item.getAmount();
+								stack.setAmount(newAmount);
+								p.getInventory().setItem(slot, stack);
+							} else {
+								p.sendMessage(ChatColor.RED
+										+ "You do not have the required item amount.");
+								return;
+							}
+						} else {
+							p.sendMessage(ChatColor.RED
+									+ "You do not have the required item.");
+							return;
+						}
 					}
 				}
 
@@ -269,7 +287,7 @@ public class ButtonListener implements Listener {
 						p.sendMessage(ChatColor.translateAlternateColorCodes(
 								'&', msg[i]));
 				}
-				
+
 				// Get Warps
 				if (ba.hasWarp()) {
 					plugin.startTimer(p, ba.getWarp());

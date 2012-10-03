@@ -1,6 +1,6 @@
 name: ButtonPromote
 main: me.iMint.ButtonPromote.ButtonPromote
-version: 2.3
+version: 2.3.1
 authors: [furt, _InnoKo_]
 depend: [Vault]
 database: true
