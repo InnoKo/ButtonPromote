@@ -276,7 +276,8 @@ public class ButtonListener implements Listener {
 								new String[] { "%p", "%w" },
 								new String[] { p.getName(),
 										p.getWorld().getName() });
-						p.performCommand(s);
+						plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), s);
+						//p.performCommand(s);
 					}
 				}
 
