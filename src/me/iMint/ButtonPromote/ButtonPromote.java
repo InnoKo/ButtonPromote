@@ -59,6 +59,7 @@ public class ButtonPromote extends JavaPlugin {
 		
 		this.getConfig().addDefault("keepOldGroups", false);
 		this.getConfig().addDefault("globalOneTimeUse", false);
+		this.getConfig().addDefault("consoleCommands", false);
 		this.getConfig().addDefault("warpTimer", 3);
 		this.getConfig().options().copyDefaults(true);
 		this.saveConfig();
