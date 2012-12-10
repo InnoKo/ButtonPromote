@@ -15,7 +15,6 @@ public class ButtonCommand implements CommandExecutor {
 		this.plugin = instance;
 	}
 
-	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
 			String[] args) {
 		if (!(sender instanceof Player)) {
