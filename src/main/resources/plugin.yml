@@ -1,7 +1,9 @@
-name: ButtonPromote
-main: me.iMint.ButtonPromote.ButtonPromote
-version: 2.3.1
+name: ${project.name}
+main: ${main.class}
+version: ${project.version}
 authors: [furt, _InnoKo_]
+description: >
+             ${project.name} takes the common button and pressure plate and extends on them. 
 depend: [Vault]
 database: true
 commands:
