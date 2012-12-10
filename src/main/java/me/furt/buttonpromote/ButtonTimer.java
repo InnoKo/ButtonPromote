@@ -1,4 +1,4 @@
-package me.iMint.ButtonPromote;
+package me.furt.buttonpromote;
 
 import java.util.TimerTask;
 

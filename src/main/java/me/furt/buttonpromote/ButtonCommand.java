@@ -1,4 +1,4 @@
-package me.iMint.ButtonPromote;
+package me.furt.buttonpromote;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
