@@ -40,6 +40,7 @@ public class ButtonPromote extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		// A test commit to see if the deploy key is working
 		selecting.clear();
 		promoting.clear();
 		warping.clear();
