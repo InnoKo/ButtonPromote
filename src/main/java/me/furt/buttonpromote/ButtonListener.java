@@ -56,7 +56,7 @@ public class ButtonListener implements Listener {
 			return;
 		}
 
-		Player p = event.getPlayer();
+		final Player p = event.getPlayer();
 		World w = p.getWorld();
 		final ButtonApi ba = new ButtonApi(plugin, w.getName(), b.getX(), b.getY(),
 				b.getZ());
@@ -298,9 +298,9 @@ public class ButtonListener implements Listener {
 					plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 					    public void run() {
 					    	Player[] players = plugin.getServer().getOnlinePlayers();
-							for (Player p : players) {
-							if(p.equals(p))
-								p.teleport(ba.getWarp());
+							for (Player player : players) {
+							if(player.equals(p))
+								player.teleport(ba.getWarp());
 							}
 					    }
 					}, plugin.getConfig().getInt("warpTimer") * 20L);
