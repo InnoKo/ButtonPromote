@@ -302,7 +302,6 @@ public class ButtonListener implements Listener {
 							if(p.equals(p))
 								p.teleport(ba.getWarp());
 							}
-					        plugin.getServer().broadcastMessage("This message is broadcast by the main thread");
 					    }
 					}, plugin.getConfig().getInt("warpTimer") * 20L);
 					//plugin.startTimer(p, ba.getWarp());
