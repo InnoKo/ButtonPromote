@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Timer;
 import java.util.logging.Level;
 import javax.persistence.PersistenceException;
 
@@ -35,8 +34,8 @@ public class ButtonPromote extends JavaPlugin {
 	public static HashMap<Player, String> permGiving = new HashMap<Player, String>();
 	public static HashMap<Player, String> currency = new HashMap<Player, String>();
 	public static HashMap<Player, Boolean> usage = new HashMap<Player, Boolean>();
-	private ButtonTimer buttonTimer;
-	private Timer etimer = new Timer();
+	//private ButtonTimer buttonTimer;
+	//private Timer etimer = new Timer();
 
 	@Override
 	public void onDisable() {
@@ -200,8 +199,8 @@ public class ButtonPromote extends JavaPlugin {
 		return getDatabase().find(ButtonTable.class).findRowCount();
 	}
 	
-	public void startTimer(Player p, Location loc) {
-		buttonTimer = new ButtonTimer(this, p, loc);
-		etimer.schedule(buttonTimer, getConfig().getInt("warpTimer") * 1000);
-	}
+	//public void startTimer(Player p, Location loc) {
+	//	buttonTimer = new ButtonTimer(this, p, loc);
+	//	etimer.schedule(buttonTimer, getConfig().getInt("warpTimer") * 1000);
+	//}
 }

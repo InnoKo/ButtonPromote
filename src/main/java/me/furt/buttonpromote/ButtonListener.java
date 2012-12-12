@@ -58,7 +58,7 @@ public class ButtonListener implements Listener {
 
 		Player p = event.getPlayer();
 		World w = p.getWorld();
-		ButtonApi ba = new ButtonApi(plugin, w.getName(), b.getX(), b.getY(),
+		final ButtonApi ba = new ButtonApi(plugin, w.getName(), b.getX(), b.getY(),
 				b.getZ());
 
 		if (ButtonPromote.selecting.containsKey(p)) {
@@ -295,7 +295,17 @@ public class ButtonListener implements Listener {
 
 				// Get Warps
 				if (ba.hasWarp()) {
-					plugin.startTimer(p, ba.getWarp());
+					plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+					    public void run() {
+					    	Player[] players = plugin.getServer().getOnlinePlayers();
+							for (Player p : players) {
+							if(p.equals(p))
+								p.teleport(ba.getWarp());
+							}
+					        plugin.getServer().broadcastMessage("This message is broadcast by the main thread");
+					    }
+					}, plugin.getConfig().getInt("warpTimer") * 20L);
+					//plugin.startTimer(p, ba.getWarp());
 				}
 
 				// If button is one time use add player to user table
