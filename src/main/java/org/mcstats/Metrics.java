@@ -33,6 +33,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -131,7 +132,7 @@ public class Metrics {
     /**
      * Id of the scheduled task
      */
-    private volatile int taskId = -1;
+    private volatile BukkitTask taskId;
 
     public Metrics(final Plugin plugin) throws IOException {
         if (plugin == null) {
@@ -225,12 +226,13 @@ public class Metrics {
             }
 
             // Is metrics already running?
-            if (taskId >= 0) {
+            if (taskId.getTaskId() >= 0) {
                 return true;
             }
 
             // Begin hitting the server with glorious data
-            taskId = plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, new Runnable() {
+            //taskId = plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, new Runnable() {
+            taskId = plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
 
                 private boolean firstPost = true;
 
@@ -239,9 +241,8 @@ public class Metrics {
                         // This has to be synchronized or it can collide with the disable method.
                         synchronized (optOutLock) {
                             // Disable Task, if it is running and the server owner decided to opt-out
-                            if (isOptOut() && taskId > 0) {
-                                plugin.getServer().getScheduler().cancelTask(taskId);
-                                taskId = -1;
+                            if (isOptOut() && taskId.getTaskId() > 0) {
+                                plugin.getServer().getScheduler().cancelTask(taskId.getTaskId());
                                 // Tell all plotters to stop gathering information.
                                 for (Graph graph : graphs){
                                     graph.onOptOut();
@@ -303,7 +304,7 @@ public class Metrics {
         	}
 
         	// Enable Task, if it is not running
-        	if (taskId < 0) {
+        	if (taskId.getTaskId() < 0) {
         		start();
         	}
         }
@@ -324,9 +325,8 @@ public class Metrics {
             }
 
             // Disable Task, if it is running
-            if (taskId > 0) {
-                this.plugin.getServer().getScheduler().cancelTask(taskId);
-                taskId = -1;
+            if (taskId.getTaskId() > 0) {
+                this.plugin.getServer().getScheduler().cancelTask(taskId.getTaskId());
             }
         }
     }
