@@ -304,7 +304,6 @@ public class ButtonListener implements Listener {
 							}
 					    }
 					}, plugin.getConfig().getInt("warpTimer") * 20L);
-					//plugin.startTimer(p, ba.getWarp());
 				}
 
 				// If button is one time use add player to user table
