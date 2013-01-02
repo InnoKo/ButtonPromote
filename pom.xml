@@ -29,7 +29,7 @@
     <repository>
       <id>bukkit</id>
       <name>bukkit</name>
-      <url>http://repo.bukkit.org/content/repositories/snapshots/</url>
+      <url>http://repo.bukkit.org/content/repositories/releases/</url>
     </repository>
     <repository>
 	  <id>vault-repo</id>
@@ -41,7 +41,7 @@
     <dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>bukkit</artifactId>
-      <version>1.4.5-R0.3-SNAPSHOT</version>
+      <version>1.4.5-R0.2</version>
     </dependency>
     <dependency>
       <groupId>net.milkbowl.vault</groupId>
