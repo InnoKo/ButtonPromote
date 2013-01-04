@@ -50,6 +50,17 @@ public class ButtonListener implements Listener {
 				return;
 			}
 
+			
+		case WOOD_BUTTON:
+			switch (a) {
+			case LEFT_CLICK_BLOCK:
+				break;
+			case RIGHT_CLICK_BLOCK:
+				break;
+			default:
+				return;
+			}
+			
 			break;
 
 		default:
