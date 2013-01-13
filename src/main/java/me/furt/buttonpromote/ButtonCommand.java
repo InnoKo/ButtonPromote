@@ -1,6 +1,7 @@
 package me.furt.buttonpromote;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -197,6 +198,18 @@ public class ButtonCommand implements CommandExecutor {
 			sender.sendMessage(ChatColor.AQUA
 					+ "Click a button to give/take currency from players! To cancel selection, type "
 					+ ChatColor.WHITE + "/bp cancel");
+		}
+		
+		// Confirm removal
+		if(args[0].equalsIgnoreCase("confirm")) {
+			if(ButtonPromote.buttonRemoval.containsKey(p.getName())) {
+				Location loc = ButtonPromote.buttonRemoval.get(p.getName());
+				ButtonApi ba = new ButtonApi(plugin, loc.getWorld().getName(), (int)loc.getX(), (int)loc.getY(), (int)loc.getZ());
+				if(ba != null) {
+					ba.clearButton(p);
+					ButtonPromote.buttonRemoval.remove(p.getName());
+				}
+			}
 		}
 
 		// Cancel Selections

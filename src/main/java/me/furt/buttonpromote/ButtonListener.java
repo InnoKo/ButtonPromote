@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -60,8 +61,6 @@ public class ButtonListener implements Listener {
 			default:
 				return;
 			}
-			
-			break;
 
 		default:
 			return;
@@ -320,6 +319,20 @@ public class ButtonListener implements Listener {
 				// If button is one time use add player to user table
 				if (ba.hasOneTimeUse())
 					ba.setUsed(p.getName(), ba.getID());
+			}
+		}
+	}
+	
+	@EventHandler
+	public void onButtonBreak(BlockBreakEvent event) {
+		Block b = event.getBlock();
+		Player p = event.getPlayer();
+		World w = p.getWorld();
+		ButtonApi ba = new ButtonApi(plugin, w.getName(), b.getX(), b.getY(), b.getZ());
+		if (ba != null) {
+			if (!ButtonPromote.permissions.has(p, "ButtonPromote.remove")) {
+				ButtonPromote.buttonRemoval.put(p.getName(), p.getLocation());
+				p.sendMessage("This button has features tied to it, to remove type /ba confirm or replace the button to keep.");
 			}
 		}
 	}

@@ -34,6 +34,7 @@ public class ButtonPromote extends JavaPlugin {
 	public static HashMap<Player, String> permGiving = new HashMap<Player, String>();
 	public static HashMap<Player, String> currency = new HashMap<Player, String>();
 	public static HashMap<Player, Boolean> usage = new HashMap<Player, Boolean>();
+	public static HashMap<String, Location> buttonRemoval = new HashMap<String, Location>();
 
 	@Override
 	public void onDisable() {
