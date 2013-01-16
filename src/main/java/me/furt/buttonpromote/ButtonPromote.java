@@ -54,7 +54,8 @@ public class ButtonPromote extends JavaPlugin {
 	public void onEnable() {
 		if (!getDataFolder().exists())
 			getDataFolder().mkdir();
-		
+		if (!new File(getDataFolder(), "config.yml").exists())
+			saveDefaultConfig();
 		this.getConfig().addDefault("keepOldGroups", false);
 		this.getConfig().addDefault("globalOneTimeUse", false);
 		this.getConfig().addDefault("consoleCommands", false);
