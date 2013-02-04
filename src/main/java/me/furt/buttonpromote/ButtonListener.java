@@ -50,8 +50,9 @@ public class ButtonListener implements Listener {
 			default:
 				return;
 			}
-
 			
+			break;
+
 		case WOOD_BUTTON:
 			switch (a) {
 			case LEFT_CLICK_BLOCK:
@@ -61,6 +62,8 @@ public class ButtonListener implements Listener {
 			default:
 				return;
 			}
+			
+			break;
 
 		default:
 			return;
