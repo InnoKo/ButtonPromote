@@ -333,9 +333,9 @@ public class ButtonListener implements Listener {
 		World w = p.getWorld();
 		ButtonApi ba = new ButtonApi(plugin, w.getName(), b.getX(), b.getY(), b.getZ());
 		if (ba != null) {
-			if (!ButtonPromote.permissions.has(p, "ButtonPromote.remove")) {
+			if (ButtonPromote.permissions.has(p, "ButtonPromote.remove")) {
 				ButtonPromote.buttonRemoval.put(p.getName(), p.getLocation());
-				p.sendMessage("This button has features tied to it, to remove type /ba confirm or replace the button to keep.");
+				p.sendMessage("This button has features tied to it, to remove type /bp confirm or replace the button to keep.");
 			}
 		}
 	}
