@@ -50,7 +50,7 @@ public class ButtonListener implements Listener {
 			default:
 				return;
 			}
-			
+
 			break;
 
 		case WOOD_BUTTON:
@@ -62,7 +62,7 @@ public class ButtonListener implements Listener {
 			default:
 				return;
 			}
-			
+
 			break;
 
 		default:
@@ -71,8 +71,8 @@ public class ButtonListener implements Listener {
 
 		final Player p = event.getPlayer();
 		World w = p.getWorld();
-		final ButtonApi ba = new ButtonApi(plugin, w.getName(), b.getX(), b.getY(),
-				b.getZ());
+		final ButtonApi ba = new ButtonApi(plugin, w.getName(), b.getX(),
+				b.getY(), b.getZ());
 
 		if (ButtonPromote.selecting.containsKey(p)) {
 			// Set Group
@@ -308,15 +308,17 @@ public class ButtonListener implements Listener {
 
 				// Get Warps
 				if (ba.hasWarp()) {
-					plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-					    public void run() {
-					    	Player[] players = plugin.getServer().getOnlinePlayers();
-							for (Player player : players) {
-							if(player.equals(p))
-								player.teleport(ba.getWarp());
-							}
-					    }
-					}, plugin.getConfig().getInt("warpTimer") * 20L);
+					plugin.getServer().getScheduler()
+							.scheduleSyncDelayedTask(plugin, new Runnable() {
+								public void run() {
+									Player[] players = plugin.getServer()
+											.getOnlinePlayers();
+									for (Player player : players) {
+										if (player.equals(p))
+											player.teleport(ba.getWarp());
+									}
+								}
+							}, plugin.getConfig().getInt("warpTimer") * 20L);
 				}
 
 				// If button is one time use add player to user table
@@ -325,18 +327,17 @@ public class ButtonListener implements Listener {
 			}
 		}
 	}
-	
+
 	@EventHandler
 	public void onButtonBreak(BlockBreakEvent event) {
 		Block b = event.getBlock();
 		Player p = event.getPlayer();
-		World w = p.getWorld();
-		ButtonApi ba = new ButtonApi(plugin, w.getName(), b.getX(), b.getY(), b.getZ());
-		if (ba != null) {
-			if (ButtonPromote.permissions.has(p, "ButtonPromote.remove")) {
-				ButtonPromote.buttonRemoval.put(p.getName(), p.getLocation());
-				p.sendMessage("This button has features tied to it, to remove type /bp confirm or replace the button to keep.");
-			}
+		ButtonApi ba = new ButtonApi(plugin, b.getWorld().getName(), b.getX(), b.getY(),
+				b.getZ());
+		if (ba != null
+				&& ButtonPromote.permissions.has(p, "ButtonPromote.remove")) {
+			ButtonPromote.buttonRemoval.put(p.getName(), p.getLocation());
+			p.sendMessage("This button has features tied to it, to remove type /bp confirm or replace the button to keep.");
 		}
 	}
 }
