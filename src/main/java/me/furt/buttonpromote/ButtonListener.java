@@ -332,12 +332,32 @@ public class ButtonListener implements Listener {
 	public void onButtonBreak(BlockBreakEvent event) {
 		Block b = event.getBlock();
 		Player p = event.getPlayer();
-		ButtonApi ba = new ButtonApi(plugin, b.getWorld().getName(), b.getX(), b.getY(),
-				b.getZ());
-		if (ba != null
-				&& ButtonPromote.permissions.has(p, "ButtonPromote.remove")) {
-			ButtonPromote.buttonRemoval.put(p.getName(), p.getLocation());
-			p.sendMessage("This button has features tied to it, to remove type /bp confirm or replace the button to keep.");
+
+		switch (b.getType()) {
+		case STONE_PLATE:
+			break;
+
+		case WOOD_PLATE:
+			break;
+
+		case STONE_BUTTON:
+			break;
+
+		case WOOD_BUTTON:
+			break;
+
+		default:
+			return;
+		}
+
+		ButtonApi ba = new ButtonApi(plugin, b.getWorld().getName(), b.getX(),
+				b.getY(), b.getZ());
+		if (ba != null) {
+			if (ButtonPromote.permissions.has(p, "ButtonPromote.remove")) {
+
+				ButtonPromote.buttonRemoval.put(p.getName(), p.getLocation());
+				p.sendMessage("This button has features tied to it, to remove type /bp confirm or type /bp cancel and replace the button to keep.");
+			}
 		}
 	}
 }
