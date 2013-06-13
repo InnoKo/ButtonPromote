@@ -26,7 +26,6 @@ public class ButtonListener implements Listener {
 		Block b = event.getClickedBlock();
 		if (b == null)
 			return;
-
 		Action a = event.getAction();
 		switch (b.getType()) {
 		case STONE_PLATE:
@@ -36,6 +35,18 @@ public class ButtonListener implements Listener {
 				return;
 
 		case WOOD_PLATE:
+			if (a.equals(Action.PHYSICAL))
+				break;
+			else
+				return;
+			
+		case GOLD_PLATE:
+			if (a.equals(Action.PHYSICAL))
+				break;
+			else
+				return;
+			
+		case IRON_PLATE:
 			if (a.equals(Action.PHYSICAL))
 				break;
 			else
@@ -328,6 +339,7 @@ public class ButtonListener implements Listener {
 		}
 	}
 
+	/*
 	@EventHandler
 	public void onButtonBreak(BlockBreakEvent event) {
 		Block b = event.getBlock();
@@ -338,6 +350,12 @@ public class ButtonListener implements Listener {
 			break;
 
 		case WOOD_PLATE:
+			break;
+			
+		case GOLD_PLATE:
+			break;
+			
+		case IRON_PLATE:
 			break;
 
 		case STONE_BUTTON:
@@ -354,10 +372,10 @@ public class ButtonListener implements Listener {
 				b.getY(), b.getZ());
 		if (ba != null) {
 			if (ButtonPromote.permissions.has(p, "ButtonPromote.remove")) {
-
 				ButtonPromote.buttonRemoval.put(p.getName(), p.getLocation());
 				p.sendMessage("This button has features tied to it, to remove type /bp confirm or type /bp cancel and replace the button to keep.");
 			}
 		}
 	}
+	*/
 }
