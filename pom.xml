@@ -33,7 +33,7 @@
     </repository>
     <repository>
 	  <id>vault-repo</id>
-	  <url>http://ci.herocraftonline.com/plugin/repository/everything</url>
+	  <url>http://repo.ess3.net/content/groups/public</url>
     </repository>
   </repositories>
   
@@ -41,12 +41,12 @@
     <dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>bukkit</artifactId>
-      <version>1.5.2-R0.1</version>
+      <version>1.7.2-R0.3</version>
     </dependency>
     <dependency>
       <groupId>net.milkbowl.vault</groupId>
       <artifactId>Vault</artifactId>
-      	<version>1.2.26-SNAPSHOT</version>
+      	<version>1.2.31</version>
     </dependency>
   </dependencies>
   
@@ -62,12 +62,17 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.1</version>
         <configuration>
           <source>${jdk}</source>
           <target>${jdk}</target>
           <encoding>${project.build.sourceEncoding}</encoding>
+             <files>
+              <plugin>${basedir}/src/main/resources/plugin.yml</plugin>
+            </files>
         </configuration>
       </plugin>
     </plugins>
   </build>
 </project>
+
