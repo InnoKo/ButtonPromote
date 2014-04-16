@@ -1,9 +1,8 @@
-name: ${project.name}
-main: ${main.class}
+name: ButtonPromote
+main: me.furt.buttonpromote.ButtonPromote
 version: ${project.version}
 authors: [furt, _InnoKo_]
-description: >
-             ${project.name} takes the common button and pressure plate and extends on them. 
+description: ButtonPromote takes the common button and pressure plate and extends on them.
 depend: [Vault]
 database: true
 commands:
@@ -13,4 +12,3 @@ commands:
         - bpromote
       description: Main command.
       usage: /<command>
-            
