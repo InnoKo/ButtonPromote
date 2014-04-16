@@ -133,8 +133,9 @@ public class ButtonPromote extends JavaPlugin {
 				+ "- Set a button to only be used once.");
 		s.sendMessage("/bp remove " + ChatColor.GOLD
 				+ "- Removes all features from a button.");
-		s.sendMessage("/bp confirm " + ChatColor.GOLD
-				+ "- Confirms removal at block break.");
+		//Blockbreak dont work yet
+		/*s.sendMessage("/bp confirm " + ChatColor.GOLD
+				+ "- Confirms removal at block break."); */
 		s.sendMessage("/bp cancel " + ChatColor.GOLD
 				+ "- Cancels any current selections.");
 		s.sendMessage("/bp reload " + ChatColor.GOLD + "- Reloads data files.");
