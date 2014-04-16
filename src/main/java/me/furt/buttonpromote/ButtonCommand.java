@@ -200,6 +200,7 @@ public class ButtonCommand implements CommandExecutor {
 					+ ChatColor.WHITE + "/bp cancel");
 		}
 		
+		/*
 		// Confirm removal
 		if(args[0].equalsIgnoreCase("confirm")) {
 			if(ButtonPromote.buttonRemoval.containsKey(p.getName())) {
@@ -210,7 +211,7 @@ public class ButtonCommand implements CommandExecutor {
 					ButtonPromote.buttonRemoval.remove(p.getName());
 				}
 			}
-		}
+		} */
 
 		// Cancel Selections
 		if (args[0].equalsIgnoreCase("cancel")) {
