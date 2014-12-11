@@ -4,7 +4,7 @@
 
   <groupId>me.furt.buttonpromote</groupId>
   <artifactId>ButtonPromote</artifactId>
-  <version>3.0.0</version>
+  <version>3.1.0</version>
   <name>ButtonPromote</name>
   <url>http://furt.me</url>
 
@@ -27,13 +27,12 @@
 
   <repositories>
     <repository>
-      <id>bukkit</id>
-      <name>bukkit</name>
-      <url>http://repo.bukkit.org/content/repositories/releases/</url>
+      <id>spigot-repo</id>
+      <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
     </repository>
     <repository>
 	  <id>vault-repo</id>
-	  <url>http://repo.ess3.net/content/groups/public</url>
+	  <url>http://nexus.theyeticave.net/content/repositories/pub_releases</url>
     </repository>
   </repositories>
   
@@ -41,12 +40,12 @@
     <dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>bukkit</artifactId>
-      <version>1.7.10-R0.1-SNAPSHOT</version>
+      <version>1.8-R0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>net.milkbowl.vault</groupId>
       <artifactId>Vault</artifactId>
-      	<version>1.2.31</version>
+      	<version>1.5.0</version>
     </dependency>
   </dependencies>
   
