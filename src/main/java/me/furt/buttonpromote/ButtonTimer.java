@@ -18,7 +18,7 @@ public class ButtonTimer extends TimerTask {
 
 	@Override
 	public void run() {
-		Player[] players = plugin.getServer().getOnlinePlayers();
+		Player[] players = (Player[]) plugin.getServer().getOnlinePlayers().toArray();
 		for (Player p : players) {
 		if(p.equals(player))
 			player.teleport(location);

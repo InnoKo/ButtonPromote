@@ -290,6 +290,7 @@ public class ButtonApi {
 				.ieq("world", world).eq("x", x).eq("y", y).eq("z", z)
 				.findUnique();
 		ItemStack i = new ItemStack(bt.getItem());
+		//ItemStack i = new ItemStack(bt.getItem());
 		i.setDurability((short) bt.getItemDurability());
 		i.setAmount(bt.getItemAmount());
 		return i;

@@ -322,8 +322,8 @@ public class ButtonListener implements Listener {
 					plugin.getServer().getScheduler()
 							.scheduleSyncDelayedTask(plugin, new Runnable() {
 								public void run() {
-									Player[] players = plugin.getServer()
-											.getOnlinePlayers();
+									Player[] players = (Player[]) plugin.getServer()
+											.getOnlinePlayers().toArray();
 									for (Player player : players) {
 										if (player.equals(p))
 											player.teleport(ba.getWarp());
