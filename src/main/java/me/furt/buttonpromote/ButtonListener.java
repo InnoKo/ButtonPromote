@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -194,9 +193,8 @@ public class ButtonListener implements Listener {
 					if (ba.hasCurrency()) {
 						String action = ba.getCurrencyAction();
 						if (action.equalsIgnoreCase("take")) {
-							EconomyResponse cash = ButtonPromote.economy
-									.withdrawPlayer(p.getName(),
-											ba.getCurrency());
+							//EconomyResponse cash = ButtonPromote.economy.withdrawPlayer(p.getName(), ba.getCurrency());
+							EconomyResponse cash = ButtonPromote.economy.withdrawPlayer(p, ba.getCurrency());
 							if (!cash.transactionSuccess()) {
 								p.sendMessage(ChatColor.RED
 										+ "You do not have enough "
@@ -242,9 +240,9 @@ public class ButtonListener implements Listener {
 					if (ba.hasCurrency()) {
 						String action = ba.getCurrencyAction();
 						if (action.equalsIgnoreCase("give")) {
-							EconomyResponse cash = ButtonPromote.economy
-									.depositPlayer(p.getName(),
-											ba.getCurrency());
+							//EconomyResponse cash = ButtonPromote.economy.depositPlayer(p.getName(), ba.getCurrency());
+							EconomyResponse cash = ButtonPromote.economy.depositPlayer(p, ba.getCurrency());
+							
 							if (cash.transactionSuccess())
 								p.sendMessage(ChatColor.GREEN
 										+ ""

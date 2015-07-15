@@ -2,6 +2,7 @@ package me.furt.buttonpromote;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -43,10 +44,11 @@ public class ButtonApi {
 			bt.setZ(z);
 			bt.setWorld(world);
 			bt.setPermission("none");
-			if (plugin.getConfig().getBoolean("globalOneTimeUse"))
+			if (plugin.getConfig().getBoolean("globalOneTimeUse")) {
 				bt.setOneTimeUse(true);
-			else
+			} else {
 				bt.setOneTimeUse(false);
+			}
 			bt.setCurrency(0);
 			bt.setCurrencyAction("none");
 			bt.setMessage("none");
@@ -58,7 +60,7 @@ public class ButtonApi {
 			bt.setWarpY(0);
 			bt.setWarpYaw(0);
 			bt.setWarpX(0);
-			bt.setItem(0);
+			bt.setItem("none");
 			bt.setItemDurability(0);
 			bt.setItemAmount(0);
 			bt.setItemAction("none");
@@ -289,8 +291,7 @@ public class ButtonApi {
 		ButtonTable bt = plugin.getDatabase().find(ButtonTable.class).where()
 				.ieq("world", world).eq("x", x).eq("y", y).eq("z", z)
 				.findUnique();
-		ItemStack i = new ItemStack(bt.getItem());
-		//ItemStack i = new ItemStack(bt.getItem());
+		ItemStack i = new ItemStack(Material.getMaterial(bt.getItem()));
 		i.setDurability((short) bt.getItemDurability());
 		i.setAmount(bt.getItemAmount());
 		return i;
@@ -305,7 +306,7 @@ public class ButtonApi {
 		ButtonTable bt = plugin.getDatabase().find(ButtonTable.class).where()
 				.ieq("world", world).eq("x", x).eq("y", y).eq("z", z)
 				.findUnique();
-		bt.setItem(i.getTypeId());
+		bt.setItem(i.getType().name());
 		bt.setItemDurability(i.getDurability());
 		bt.setItemAmount(i.getAmount());
 		plugin.getDatabase().save(bt);

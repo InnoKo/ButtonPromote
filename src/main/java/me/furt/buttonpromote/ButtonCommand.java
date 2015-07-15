@@ -200,18 +200,21 @@ public class ButtonCommand implements CommandExecutor {
 					+ ChatColor.WHITE + "/bp cancel");
 		}
 		
-		/*
 		// Confirm removal
 		if(args[0].equalsIgnoreCase("confirm")) {
 			if(ButtonPromote.buttonRemoval.containsKey(p.getName())) {
 				Location loc = ButtonPromote.buttonRemoval.get(p.getName());
 				ButtonApi ba = new ButtonApi(plugin, loc.getWorld().getName(), (int)loc.getX(), (int)loc.getY(), (int)loc.getZ());
 				if(ba != null) {
-					ba.clearButton(p);
-					ButtonPromote.buttonRemoval.remove(p.getName());
+					if (ba.clearButton(p)) {
+						sender.sendMessage(ChatColor.GREEN + "Button was successfully removed.");
+						ButtonPromote.buttonRemoval.remove(p.getName());
+					} else {
+						sender.sendMessage(ChatColor.RED + "Button was not removed, maybe improper coords where saved.");
+					}
 				}
 			}
-		} */
+		}
 
 		// Cancel Selections
 		if (args[0].equalsIgnoreCase("cancel")) {

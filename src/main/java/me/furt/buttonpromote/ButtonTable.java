@@ -64,8 +64,8 @@ public class ButtonTable {
 	@NotNull
 	private float warpPitch;
 
-	@NotNull
-	private int item;
+	@NotEmpty
+	private String item;
 
 	@NotNull
 	private int itemDurability;
@@ -220,11 +220,11 @@ public class ButtonTable {
 		this.warpPitch = warpPitch;
 	}
 
-	public int getItem() {
+	public String getItem() {
 		return item;
 	}
 
-	public void setItem(int item) {
+	public void setItem(String item) {
 		this.item = item;
 	}
 
